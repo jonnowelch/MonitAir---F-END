@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import Header from "../Components/Header";
 import React from "react";
+import Circle from "../Components/Circle";
 
 export interface Props {
   navigation: any;
@@ -30,30 +31,10 @@ export default class Hello extends React.Component<Props, State> {
       <>
         <Header navigate={this.props.navigation.navigate} />
         <View style={styles.container}>
-          <View style={styles.gridItem}>
-            <View style={styles.circle}>
-              <Text style={styles.text}>{this.state.temp}</Text>
-            </View>
-            <Text style={styles.text}>Temperature</Text>
-          </View>
-          <View style={styles.gridItem}>
-            <View style={styles.circle}>
-              <Text style={styles.text}>{this.state.pressure}</Text>
-            </View>
-            <Text style={styles.text}>Pressure</Text>
-          </View>
-          <View style={styles.gridItem}>
-            <View style={styles.circle}>
-              <Text style={styles.text}>{this.state.humidity}</Text>
-            </View>
-            <Text style={styles.text}>Humidity</Text>
-          </View>
-          <View style={styles.gridItem}>
-            <View style={styles.circle}>
-              <Text style={styles.text}>{this.state.tvoc}</Text>
-            </View>
-            <Text style={styles.text}>Air Quality</Text>
-          </View>
+          <Circle title="Temperature" reading={this.state.temp} />
+          <Circle title="Pressure" reading={this.state.pressure} />
+          <Circle title="Humidity" reading={this.state.humidity} />
+          <Circle title="Air Quality" reading={this.state.tvoc} />
         </View>
       </>
     );
@@ -69,24 +50,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center"
-  },
-  gridItem: {
-    width: "50%",
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  circle: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    borderColor: "black",
-    borderWidth: 2,
-    marginTop: 25,
-    marginBottom: 5,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  text: {
-    fontSize: 22
   }
 });
