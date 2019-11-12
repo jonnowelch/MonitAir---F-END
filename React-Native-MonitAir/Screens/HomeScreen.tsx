@@ -32,27 +32,27 @@ export default class Hello extends React.Component<Props, State> {
         <View style={styles.container}>
           <View style={styles.gridItem}>
             <View style={styles.circle}>
-              <Text>{this.state.temp}</Text>
+              <Text style={styles.text}>{this.state.temp}</Text>
             </View>
-            <Text>Temperature</Text>
+            <Text style={styles.text}>Temperature</Text>
           </View>
           <View style={styles.gridItem}>
             <View style={styles.circle}>
-              <Text>{this.state.pressure}</Text>
+              <Text style={styles.text}>{this.state.pressure}</Text>
             </View>
-            <Text>Pressure</Text>
+            <Text style={styles.text}>Pressure</Text>
           </View>
           <View style={styles.gridItem}>
             <View style={styles.circle}>
-              <Text>{this.state.humidity}</Text>
+              <Text style={styles.text}>{this.state.humidity}</Text>
             </View>
-            <Text>Humidity</Text>
+            <Text style={styles.text}>Humidity</Text>
           </View>
           <View style={styles.gridItem}>
             <View style={styles.circle}>
-              <Text>{this.state.tvoc}</Text>
+              <Text style={styles.text}>{this.state.tvoc}</Text>
             </View>
-            <Text>Air Quality</Text>
+            <Text style={styles.text}>Air Quality</Text>
           </View>
         </View>
       </>
@@ -62,6 +62,7 @@ export default class Hello extends React.Component<Props, State> {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 20,
     flex: 1,
     flexDirection: "row",
     flexWrap: "wrap",
@@ -80,8 +81,12 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     borderColor: "black",
     borderWidth: 2,
-    margin: 25,
+    marginTop: 25,
+    marginBottom: 5,
     justifyContent: "center",
     alignItems: "center"
+  },
+  text: {
+    fontSize: 22
   }
 });
