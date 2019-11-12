@@ -4,7 +4,7 @@ import { createStackNavigator } from "react-navigation-stack";
 import HomeScreen from "./Screens/HomeScreen";
 
 const MainNavigator = createStackNavigator({
-  Home: { screen: HomeScreen }
+  Home: { screen: HomeScreen, navigationOptions: { header: null } }
 });
 
 const AppContainer = createAppContainer(MainNavigator);
