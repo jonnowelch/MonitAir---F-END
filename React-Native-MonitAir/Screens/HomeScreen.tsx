@@ -3,7 +3,7 @@ import Header from "../Components/Header";
 import React from "react";
 import Circle from "../Components/Circle";
 
-export interface Props {
+export interface HomeProps {
   navigation: any;
 }
 
@@ -14,8 +14,8 @@ interface State {
   tvoc: number;
 }
 
-export default class Hello extends React.Component<Props, State> {
-  constructor(props: Props) {
+export default class HomeScreen extends React.Component<HomeProps, State> {
+  constructor(props: HomeProps) {
     super(props);
 
     this.state = {
@@ -31,10 +31,26 @@ export default class Hello extends React.Component<Props, State> {
       <>
         <Header navigate={this.props.navigation.navigate} />
         <View style={styles.container}>
-          <Circle title="Temperature" reading={this.state.temp} />
-          <Circle title="Pressure" reading={this.state.pressure} />
-          <Circle title="Humidity" reading={this.state.humidity} />
-          <Circle title="Air Quality" reading={this.state.tvoc} />
+          <Circle
+            title="Temperature"
+            navigate={this.props.navigation.navigate}
+            reading={this.state.temp}
+          />
+          <Circle
+            title="Pressure"
+            navigate={this.props.navigation.navigate}
+            reading={this.state.pressure}
+          />
+          <Circle
+            title="Humidity"
+            navigate={this.props.navigation.navigate}
+            reading={this.state.humidity}
+          />
+          <Circle
+            title="Air Quality"
+            navigate={this.props.navigation.navigate}
+            reading={this.state.tvoc}
+          />
         </View>
       </>
     );

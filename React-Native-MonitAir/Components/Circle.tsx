@@ -4,14 +4,22 @@ import { View, Text, StyleSheet } from "react-native";
 export interface CircleProps {
   title: string;
   reading: number;
+  navigate: any;
 }
 
-const Circle: React.SFC<CircleProps> = ({ title, reading }) => {
+const Circle: React.SFC<CircleProps> = ({ title, reading, navigate }) => {
   return (
     <>
       <View style={styles.gridItem}>
         <View style={styles.circle}>
-          <Text style={styles.text}>{reading}</Text>
+          <Text
+            style={styles.text}
+            onPress={() => {
+              navigate("Analysis", { title: title });
+            }}
+          >
+            {reading}
+          </Text>
         </View>
         <Text style={styles.text}>{title}</Text>
       </View>
