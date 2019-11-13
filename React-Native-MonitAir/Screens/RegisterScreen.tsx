@@ -43,7 +43,7 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
             user: this.state.user
           });
         })
-        .catch(error => {
+        .catch((error: any) => {
           const errCode = error.code;
           const errMsg = error.message;
         });
