@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, Button, TextInput } from "react-native";
 import Header from "../Components/Header";
 import DatePicker from "react-native-datepicker";
+import firebase from "../firebase.js";
 
 export interface RegisterProps {
   navigation: any;
@@ -29,6 +30,24 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
     };
   }
   render() {
+    const handleSubmit = () => {
+      const { email, password } = this.state;
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then(() => {
+          this.props.navigation.navigate("Home", {
+            forename: this.state.forename,
+            surname: this.state.surname,
+            email: this.state.email,
+            user: this.state.user
+          });
+        })
+        .catch(error => {
+          const errCode = error.code;
+          const errMsg = error.message;
+        });
+    };
     return (
       <>
         <Header navigate={this.props.navigation.navigate} />
@@ -90,20 +109,7 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
             }}
             onDateChange={date => this.setState({ DOB: date })}
           ></DatePicker>
-          <Button
-            title="Submit"
-            color="green"
-            onPress={() => {
-              this.props.navigation.navigate("Home", {
-                forename: this.state.forename,
-                surname: this.state.surname,
-                email: this.state.email,
-                user: this.state.user,
-                DOB: this.state.DOB,
-                password: this.state.password
-              });
-            }}
-          />
+          <Button title="Submit" color="green" onPress={handleSubmit} />
         </View>
       </>
     );
