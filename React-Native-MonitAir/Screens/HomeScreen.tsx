@@ -5,6 +5,10 @@ import Circle from "../Components/Circle";
 
 export interface HomeProps {
   navigation: any;
+  email: string;
+  uid: any;
+  displayName: string;
+  photoURL: string;
 }
 
 interface State {
@@ -28,7 +32,7 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
 
   render() {
     const { navigation } = this.props;
-    const user = JSON.stringify(navigation.getParam("user")).split('"')[1];
+    const user = JSON.stringify(navigation.getParam("email")).split('"')[1];
     return (
       <>
         <Header navigate={this.props.navigation.navigate} />

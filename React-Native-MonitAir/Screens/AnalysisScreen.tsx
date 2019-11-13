@@ -5,6 +5,10 @@ import Header from "../Components/Header";
 export interface AnalysisProps {
   navigation: any;
   title: string;
+  email: string;
+  uid: any;
+  displayName: string;
+  photoURL: string;
 }
 interface State {
   readings: object[];

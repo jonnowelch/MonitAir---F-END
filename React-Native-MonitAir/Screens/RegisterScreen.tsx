@@ -6,6 +6,10 @@ import firebase from "../firebase.js";
 
 export interface RegisterProps {
   navigation: any;
+  email: string;
+  uid: any;
+  displayName: string;
+  photoURL: string;
 }
 
 interface State {
@@ -32,6 +36,7 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
   render() {
     const handleSubmit = () => {
       const { email, password } = this.state;
+
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
