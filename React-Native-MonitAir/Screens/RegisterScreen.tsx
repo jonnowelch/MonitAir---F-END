@@ -1,34 +1,70 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Button, TextInput } from "react-native";
+import { StyleSheet, Text, View, Button, TextInput, Alert } from "react-native";
 import Header from "../Components/Header";
-import DatePicker from "react-native-datepicker";
+import firebase from "../firebase.js";
 
 export interface RegisterProps {
   navigation: any;
+  email: string;
+  uid: any;
+  displayName: string;
+  photoURL: string;
 }
 
 interface State {
-  forename: string;
+  first_name: string;
   surname: string;
   email: string;
   password: string;
-  user: string;
+  username: string;
   DOB: Date;
+  errMsg: string;
+  sensor_id: string;
 }
 
 export default class RegisterScreen extends Component<RegisterProps, State> {
   constructor(props: RegisterProps) {
     super(props);
     this.state = {
-      forename: "",
+      first_name: "",
       surname: "",
       email: "",
       password: "",
-      user: "",
-      DOB: null
+      username: "",
+      DOB: null,
+      sensor_id: "",
+      errMsg: undefined
     };
   }
   render() {
+    const { errMsg } = this.state;
+    if (errMsg)
+      Alert.alert("Registration Failed", errMsg, [
+        {
+          text: "Please try again",
+          onPress: () => this.setState({ errMsg: undefined })
+        }
+      ]);
+    const handleSubmit = () => {
+      const { email, password } = this.state;
+
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then(() => {
+          this.props.navigation.navigate("Home", {
+            first_name: this.state.first_name,
+            surname: this.state.surname,
+            email: this.state.email,
+            username: this.state.username
+          });
+        })
+        .catch((error: any) => {
+          const errCode = error.code;
+          const errMsg = error.message;
+          this.setState({ errMsg });
+        });
+    };
     return (
       <>
         <Header navigate={this.props.navigation.navigate} />
@@ -39,8 +75,8 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
           <TextInput
             style={{ height: 40, borderColor: "black", borderWidth: 1 }}
             placeholder="Enter Forename"
-            value={this.state.forename}
-            onChangeText={forename => this.setState({ forename })}
+            value={this.state.first_name}
+            onChangeText={first_name => this.setState({ first_name })}
           ></TextInput>
           <TextInput
             style={{ height: 40, borderColor: "black", borderWidth: 1 }}
@@ -57,8 +93,8 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
           <TextInput
             style={{ height: 40, borderColor: "black", borderWidth: 1 }}
             placeholder="Create Usernmae"
-            value={this.state.user}
-            onChangeText={user => this.setState({ user })}
+            value={this.state.username}
+            onChangeText={username => this.setState({ username })}
           ></TextInput>
           <TextInput
             style={{ height: 40, borderColor: "black", borderWidth: 1 }}
@@ -67,43 +103,13 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
             secureTextEntry={true}
             onChangeText={password => this.setState({ password })}
           ></TextInput>
-          <DatePicker
-            style={{ width: 200 }}
-            mode="date"
-            placeholder="Select DOB"
-            format="DD-MM-YYYY"
-            minDate="11-12-1920"
-            maxDate="12-11-2019"
-            confirmBtnText="Confirm"
-            cancelBtnText="Cancel"
-            value={this.state.DOB}
-            customStyles={{
-              dateIcon: {
-                position: "absolute",
-                left: 0,
-                top: 4,
-                marginLeft: 0
-              },
-              dateInput: {
-                marginLeft: 36
-              }
-            }}
-            onDateChange={date => this.setState({ DOB: date })}
-          ></DatePicker>
-          <Button
-            title="Submit"
-            color="green"
-            onPress={() => {
-              this.props.navigation.navigate("Home", {
-                forename: this.state.forename,
-                surname: this.state.surname,
-                email: this.state.email,
-                user: this.state.user,
-                DOB: this.state.DOB,
-                password: this.state.password
-              });
-            }}
-          />
+          <TextInput
+            style={{ height: 40, borderColor: "black", borderWidth: 1 }}
+            placeholder="Enter Sensor ID"
+            value={this.state.sensor_id}
+            onChangeText={sensor_id => this.setState({ sensor_id })}
+          ></TextInput>
+          <Button title="Submit" color="green" onPress={handleSubmit} />
         </View>
       </>
     );

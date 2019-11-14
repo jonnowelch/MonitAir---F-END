@@ -19,6 +19,12 @@ const MainNavigator = createStackNavigator(
 const AppContainer = createAppContainer(MainNavigator);
 
 export default class App extends React.Component {
+  state = {
+    email: "",
+    uid: "",
+    displayName: "",
+    photoURL: ""
+  };
   render() {
     return <AppContainer />;
   }

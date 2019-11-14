@@ -1,25 +1,56 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Button, TextInput } from "react-native";
+import { StyleSheet, Text, View, Button, TextInput, Alert } from "react-native";
 import Header from "../Components/Header";
+import firebase from "../firebase.js";
 
 export interface LoginProps {
   navigation: any;
+  email: string;
+  uid: any;
+  displayName: string;
+  photoURL: string;
 }
 
 interface State {
-  user: string;
+  email: string;
   password: string;
+  errMsg: string;
 }
 
 export default class LoginScreen extends Component<LoginProps, State> {
   constructor(props: LoginProps) {
     super(props);
     this.state = {
-      user: "",
-      password: ""
+      email: "",
+      password: "",
+      errMsg: undefined
     };
   }
   render() {
+    const { errMsg } = this.state;
+    if (errMsg)
+      Alert.alert("Login failed", errMsg, [
+        {
+          text: "Try again",
+          onPress: () => this.setState({ errMsg: undefined })
+        }
+      ]);
+    const handleLogin = () => {
+      const { email, password } = this.state;
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(() => {
+          this.props.navigation.navigate("Home", {
+            email
+          });
+        })
+        .catch(error => {
+          const errCode = error.code;
+          const errMsg = error.message;
+          this.setState({ errMsg });
+        });
+    };
     return (
       <>
         <Header navigate={this.props.navigation.navigate} />
@@ -28,9 +59,9 @@ export default class LoginScreen extends Component<LoginProps, State> {
           <View style={{ padding: 10, marginTop: 40 }}>
             <TextInput
               style={{ height: 40, borderColor: "black", borderWidth: 1 }}
-              placeholder="Enter Username"
-              value={this.state.user}
-              onChangeText={user => this.setState({ user })}
+              placeholder="Enter Email"
+              value={this.state.email}
+              onChangeText={email => this.setState({ email })}
             />
             <TextInput
               style={{ height: 40, borderColor: "black", borderWidth: 1 }}
@@ -40,17 +71,9 @@ export default class LoginScreen extends Component<LoginProps, State> {
               onChangeText={password => this.setState({ password })}
             />
           </View>
+          {/* {this.state.errMsg ? <Text>Invalid password!!</Text> : null} */}
           <View>
-            <Button
-              onPress={() =>
-                this.props.navigation.navigate("Home", {
-                  user: this.state.user,
-                  password: this.state.password
-                })
-              }
-              title="Login"
-              color="green"
-            />
+            <Button onPress={handleLogin} title="Login" color="green" />
           </View>
           <View>
             <Text style={{ marginTop: 20 }}>
@@ -59,7 +82,9 @@ export default class LoginScreen extends Component<LoginProps, State> {
             <Button
               title="Register"
               color="red"
-              onPress={() => this.props.navigation.navigate("Register")}
+              onPress={() => {
+                this.props.navigation.navigate("Register");
+              }}
             />
           </View>
         </View>
