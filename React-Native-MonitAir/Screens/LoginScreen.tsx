@@ -2,19 +2,18 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, Button, TextInput, Alert } from "react-native";
 import Header from "../Components/Header";
 import firebase from "../firebase.js";
+import Loading from "../Components/Loading";
 
 export interface LoginProps {
   navigation: any;
-  email: string;
-  uid: any;
-  displayName: string;
-  photoURL: string;
 }
 
 interface State {
   email: string;
+  username: string;
   password: string;
   errMsg: string;
+  isLoading: boolean;
 }
 
 export default class LoginScreen extends Component<LoginProps, State> {
@@ -22,9 +21,14 @@ export default class LoginScreen extends Component<LoginProps, State> {
     super(props);
     this.state = {
       email: "",
+      username: "",
       password: "",
-      errMsg: undefined
+      errMsg: undefined,
+      isLoading: true
     };
+  }
+  componentDidMount() {
+    this.setState({ isLoading: false });
   }
   render() {
     const { errMsg } = this.state;
@@ -36,13 +40,16 @@ export default class LoginScreen extends Component<LoginProps, State> {
         }
       ]);
     const handleLogin = () => {
-      const { email, password } = this.state;
+      const { isLoading } = this.state;
+      if (isLoading) return <Loading />;
+      const { email, password, username } = this.state;
       firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then(() => {
           this.props.navigation.navigate("Home", {
-            email
+            email,
+            username
           });
         })
         .catch(error => {
@@ -65,13 +72,18 @@ export default class LoginScreen extends Component<LoginProps, State> {
             />
             <TextInput
               style={{ height: 40, borderColor: "black", borderWidth: 1 }}
+              placeholder="Enter Username"
+              value={this.state.username}
+              onChangeText={username => this.setState({ username })}
+            />
+            <TextInput
+              style={{ height: 40, borderColor: "black", borderWidth: 1 }}
               placeholder="Enter Password"
               value={this.state.password}
               secureTextEntry={true}
               onChangeText={password => this.setState({ password })}
             />
           </View>
-          {/* {this.state.errMsg ? <Text>Invalid password!!</Text> : null} */}
           <View>
             <Button onPress={handleLogin} title="Login" color="green" />
           </View>

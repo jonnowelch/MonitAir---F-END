@@ -5,10 +5,6 @@ import firebase from "../firebase.js";
 
 export interface RegisterProps {
   navigation: any;
-  email: string;
-  uid: any;
-  displayName: string;
-  photoURL: string;
 }
 
 interface State {

@@ -1,5 +1,11 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableHighlight
+} from "react-native";
 
 export interface HeaderProps {
   navigate: (arg0: string) => {};
@@ -7,11 +13,21 @@ export interface HeaderProps {
 
 const Header: React.SFC<HeaderProps> = ({ navigate }) => {
   return (
-    <View>
-      <Text style={styles.header} onPress={() => navigate("Home")}>
-        MonitAir
-      </Text>
-    </View>
+    <>
+      <View style={{ justifyContent: "center" }}>
+        <TouchableHighlight onPress={() => navigate("Home")}>
+          <Image
+            source={require("../assets/transparent-logo.png")}
+            style={{
+              height: 100,
+              width: 250,
+              alignSelf: "center",
+              marginTop: 10
+            }}
+          ></Image>
+        </TouchableHighlight>
+      </View>
+    </>
   );
 };
 
