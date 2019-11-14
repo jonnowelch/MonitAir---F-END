@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Button, TextInput } from "react-native";
+import { StyleSheet, Text, View, Button, TextInput, Alert } from "react-native";
 import Header from "../Components/Header";
 import firebase from "../firebase.js";
 
@@ -27,6 +27,14 @@ export default class LoginScreen extends Component<LoginProps, State> {
     };
   }
   render() {
+    const { errMsg } = this.state;
+    if (errMsg)
+      Alert.alert("Login failed", errMsg, [
+        {
+          text: "Try again",
+          onPress: () => this.setState({ errMsg: undefined })
+        }
+      ]);
     const handleLogin = () => {
       const { email, password } = this.state;
       firebase
