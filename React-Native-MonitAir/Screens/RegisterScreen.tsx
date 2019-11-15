@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Button, TextInput, Alert } from "react-native";
 import Header from "../Components/Header";
 import firebase from "../firebase.js";
 import axios from "axios";
+import Loading from "../Components/Loading";
 
 export interface RegisterProps {
   navigation: any;
@@ -16,6 +17,7 @@ interface State {
   username: string;
   errMsg: string;
   sensor_id: string;
+  isLoading: boolean;
 }
 
 export default class RegisterScreen extends Component<RegisterProps, State> {
@@ -28,10 +30,15 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
       password: "",
       username: "",
       sensor_id: "",
-      errMsg: undefined
+      errMsg: undefined,
+      isLoading: true
     };
   }
+  componentDidMount() {
+    setTimeout(() => this.setState({ isLoading: false }), 1000);
+  }
   render() {
+    if (this.state.isLoading) return <Loading />;
     const { errMsg } = this.state;
     if (errMsg)
       Alert.alert("Registration Failed", errMsg, [
