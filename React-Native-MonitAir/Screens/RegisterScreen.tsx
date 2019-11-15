@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, Button, TextInput, Alert } from "react-native";
 import Header from "../Components/Header";
 import firebase from "../firebase.js";
+import axios from "axios";
 
 export interface RegisterProps {
   navigation: any;
@@ -13,7 +14,6 @@ interface State {
   email: string;
   password: string;
   username: string;
-  DOB: Date;
   errMsg: string;
   sensor_id: string;
 }
@@ -27,7 +27,6 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
       email: "",
       password: "",
       username: "",
-      DOB: null,
       sensor_id: "",
       errMsg: undefined
     };
@@ -42,11 +41,29 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
         }
       ]);
     const handleSubmit = () => {
-      const { email, password } = this.state;
+      const {
+        email,
+        password,
+        first_name,
+        surname,
+        username,
+        sensor_id
+      } = this.state;
 
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
+        .then(() => {
+          const userID = firebase.auth().currentUser!.uid;
+          axios.post("http://brejconies.pythonanywhere.com/user", {
+            first_name,
+            surname,
+            email,
+            username,
+            sensor_id,
+            user_id: userID
+          });
+        })
         .then(() => {
           this.props.navigation.navigate("Home", {
             first_name: this.state.first_name,
@@ -56,7 +73,6 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
           });
         })
         .catch((error: any) => {
-          const errCode = error.code;
           const errMsg = error.message;
           this.setState({ errMsg });
         });

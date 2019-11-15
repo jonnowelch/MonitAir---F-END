@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import { StyleSheet, Text, View, Button } from "react-native";
 import Header from "../Components/Header";
 import React from "react";
 import Circle from "../Components/Circle";
@@ -66,6 +66,17 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
             title="Air Quality"
             navigate={this.props.navigation.navigate}
             reading={reading.tvoc_mean}
+          />
+          <Text>
+            Click the button below for hints and tips on how to keep the air
+            quality clean in your home!
+          </Text>
+          <Button
+            title="Hints & tips"
+            color="#3B7BFF"
+            onPress={() => {
+              this.props.navigation.navigate("Hints");
+            }}
           />
         </View>
       </>
