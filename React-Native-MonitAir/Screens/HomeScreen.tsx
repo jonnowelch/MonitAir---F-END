@@ -13,6 +13,7 @@ interface State {
   isLoading: boolean;
   reading: any;
   errMsg: string;
+  loggedInUser: any;
 }
 
 export default class HomeScreen extends React.Component<HomeProps, State> {
@@ -20,6 +21,7 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
     super(props);
 
     this.state = {
+      loggedInUser: [],
       isLoading: true,
       reading: {},
       errMsg: ""
@@ -33,37 +35,53 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
       .then(r => {
         this.setState({ reading: r.data, isLoading: false });
       })
+      .then(() => {
+        axios.get("http://brejconies.pythonanywhere.com/user").then(r => {
+          const { navigation } = this.props;
+          const email = JSON.stringify(navigation.getParam("email")).split(
+            '"'
+          )[1];
+          const checkUsers = r.data.filter(user => {
+            if (user.email === email) {
+              return user;
+            }
+          });
+          this.setState({ loggedInUser: checkUsers, isLoading: false });
+        });
+      })
       .catch(err => {
         console.log(err);
       });
   }
   render() {
     const { reading } = this.state;
+    const { loggedInUser } = this.state;
     if (this.state.isLoading) return <Loading />;
-    const { navigation } = this.props;
-    const user = JSON.stringify(navigation.getParam("username")).split('"')[1];
     return (
       <>
         <Header navigate={this.props.navigation.navigate} />
-        <Text>Hi {user} welcome to your mointAir!</Text>
+        <Text>
+          Hi {loggedInUser[0] && loggedInUser[0].username} welcome to your
+          mointAir!
+        </Text>
         <View style={styles.container}>
           <Circle
-            title="Temperature"
+            title="Temperature - °C"
             navigate={this.props.navigation.navigate}
             reading={reading.temp_mean}
           />
           <Circle
-            title="Pressure"
+            title="Pressure - Pa"
             navigate={this.props.navigation.navigate}
             reading={reading.pressure_mean}
           />
           <Circle
-            title="Humidity"
+            title="Humidity - %"
             navigate={this.props.navigation.navigate}
             reading={reading.humidity_mean}
           />
           <Circle
-            title="Air Quality"
+            title="Air Quality - PPM"
             navigate={this.props.navigation.navigate}
             reading={reading.tvoc_mean}
           />
