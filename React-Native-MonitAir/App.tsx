@@ -5,6 +5,7 @@ import HomeScreen from "./Screens/HomeScreen";
 import AnalysisScreen from "./Screens/AnalysisScreen";
 import LoginScreen from "./Screens/LoginScreen";
 import RegisterScreen from "./Screens/RegisterScreen";
+import Loading from "./Components/Loading";
 
 const MainNavigator = createStackNavigator(
   {
@@ -20,12 +21,13 @@ const AppContainer = createAppContainer(MainNavigator);
 
 export default class App extends React.Component {
   state = {
-    email: "",
-    uid: "",
-    displayName: "",
-    photoURL: ""
+    isLoading: true
   };
+  componentDidMount() {
+    setTimeout(() => this.setState({ isLoading: false }), 3000);
+  }
   render() {
+    if (this.state.isLoading) return <Loading />;
     return <AppContainer />;
   }
 }

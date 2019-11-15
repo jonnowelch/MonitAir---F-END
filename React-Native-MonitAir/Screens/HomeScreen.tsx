@@ -1,21 +1,18 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, FlatList } from "react-native";
 import Header from "../Components/Header";
 import React from "react";
 import Circle from "../Components/Circle";
+import Loading from "../Components/Loading";
+import axios from "axios";
 
 export interface HomeProps {
   navigation: any;
-  email: string;
-  uid: any;
-  displayName: string;
-  photoURL: string;
 }
 
 interface State {
-  temp: number;
-  pressure: number;
-  humidity: number;
-  tvoc: number;
+  isLoading: boolean;
+  reading: any;
+  errMsg: string;
 }
 
 export default class HomeScreen extends React.Component<HomeProps, State> {
@@ -23,16 +20,28 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
     super(props);
 
     this.state = {
-      temp: 20,
-      pressure: 300,
-      humidity: 22,
-      tvoc: 12
+      isLoading: true,
+      reading: {},
+      errMsg: ""
     };
   }
-
+  componentDidMount() {
+    axios
+      .get(
+        "http://brejconies.pythonanywhere.com/most_recent_reading/00000000b7b25684"
+      )
+      .then(r => {
+        this.setState({ reading: r.data, isLoading: false });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
   render() {
+    const { reading } = this.state;
+    if (this.state.isLoading) return <Loading />;
     const { navigation } = this.props;
-    const user = JSON.stringify(navigation.getParam("email")).split('"')[1];
+    const user = JSON.stringify(navigation.getParam("username")).split('"')[1];
     return (
       <>
         <Header navigate={this.props.navigation.navigate} />
@@ -41,22 +50,22 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
           <Circle
             title="Temperature"
             navigate={this.props.navigation.navigate}
-            reading={this.state.temp}
+            reading={reading.temp_mean}
           />
           <Circle
             title="Pressure"
             navigate={this.props.navigation.navigate}
-            reading={this.state.pressure}
+            reading={reading.pressure_mean}
           />
           <Circle
             title="Humidity"
             navigate={this.props.navigation.navigate}
-            reading={this.state.humidity}
+            reading={reading.humidity_mean}
           />
           <Circle
             title="Air Quality"
             navigate={this.props.navigation.navigate}
-            reading={this.state.tvoc}
+            reading={reading.tvoc_mean}
           />
         </View>
       </>
