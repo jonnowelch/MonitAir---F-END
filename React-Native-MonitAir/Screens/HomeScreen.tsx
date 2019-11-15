@@ -10,12 +10,8 @@ export interface HomeProps {
 }
 
 interface State {
-  temp: number;
-  pressure: number;
-  humidity: number;
-  tvoc: number;
   isLoading: boolean;
-  readings: any;
+  reading: any;
   errMsg: string;
 }
 
@@ -24,29 +20,25 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
     super(props);
 
     this.state = {
-      temp: 20,
-      pressure: 300,
-      humidity: 22,
-      tvoc: 12,
       isLoading: true,
-      readings: [],
+      reading: {},
       errMsg: ""
     };
   }
   componentDidMount() {
     axios
-      .get("http://brejconies.pythonanywhere.com/reading/00000000b7b25684")
+      .get(
+        "http://brejconies.pythonanywhere.com/most_recent_reading/00000000b7b25684"
+      )
       .then(r => {
-        this.setState({ readings: r.data, isLoading: false });
+        this.setState({ reading: r.data, isLoading: false });
       })
       .catch(err => {
         console.log(err);
       });
   }
   render() {
-    const randomReading = Math.floor(Math.random() * 30 + 1);
-    const reading = this.state.readings[randomReading];
-    console.log(reading);
+    const { reading } = this.state;
     if (this.state.isLoading) return <Loading />;
     const { navigation } = this.props;
     const user = JSON.stringify(navigation.getParam("username")).split('"')[1];
@@ -68,7 +60,7 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
           <Circle
             title="Humidity"
             navigate={this.props.navigation.navigate}
-            reading={this.state.humidity}
+            reading={reading.humidity_mean}
           />
           <Circle
             title="Air Quality"
