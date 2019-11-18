@@ -3,6 +3,7 @@ import { Text, View, Image, FlatList } from "react-native";
 import Header from "../Components/Header";
 import axios from "axios";
 import Loading from "../Components/Loading";
+import DatePicker from "react-native-datepicker";
 
 export interface AnalysisProps {
   navigation: any;
@@ -11,6 +12,8 @@ export interface AnalysisProps {
 interface State {
   readings: object[];
   isLoading: boolean;
+  dateFrom: Date;
+  dateTo: Date;
 }
 
 export default class AnalysisScreen extends React.Component<
@@ -22,12 +25,21 @@ export default class AnalysisScreen extends React.Component<
 
     this.state = {
       readings: [],
-      isLoading: true
+      isLoading: true,
+      dateFrom: null,
+      dateTo: null
     };
   }
   componentDidMount() {
+    const { navigation } = this.props;
+    const sensor_id = JSON.stringify(navigation.getParam("sensor_id")).split(
+      '"'
+    )[1];
+    const query = JSON.stringify(navigation.getParam("query")).split('"')[1];
     axios
-      .get("http://brejconies.pythonanywhere.com/reading/00000000b7b25684")
+      .get(
+        `http://brejconies.pythonanywhere.com/reading/${sensor_id}?measurement=${query}`
+      )
       .then(r => {
         this.setState({ readings: r.data, isLoading: false });
       })
@@ -36,11 +48,12 @@ export default class AnalysisScreen extends React.Component<
       });
   }
   render() {
+    const { navigation } = this.props;
+    const query = JSON.stringify(navigation.getParam("query")).split('"')[1];
     const title = JSON.stringify(this.props.navigation.getParam("title")).split(
       '"'
     )[1];
     const { readings } = this.state;
-    console.log(readings);
     if (this.state.isLoading) return <Loading />;
     return (
       <>
@@ -53,12 +66,64 @@ export default class AnalysisScreen extends React.Component<
               uri: "https://media.giphy.com/media/xT77XKxcPqxIZqUrwk/giphy.gif"
             }}
           />
+          <Text>Select date range to see analysis</Text>
+          <Text>Date from</Text>
+          <DatePicker
+            style={{ width: 200 }}
+            date={this.state.dateFrom}
+            mode="date"
+            placeholder="Select Date"
+            format="DD-MM-YYYY"
+            minDate="01-01-1950"
+            maxDate="01-01-2019"
+            confirmBtnText="Confirm"
+            cancelBtnText="Cancel"
+            customStyles={{
+              dateIcon: {
+                position: "absolute",
+                left: 0,
+                top: 4,
+                marginLeft: 0
+              },
+              dateInput: {
+                marginLeft: 36
+              }
+            }}
+            onDateChange={date => {
+              this.setState({ dateFrom: date });
+            }}
+          ></DatePicker>
+          <Text>Date To</Text>
+          <DatePicker
+            style={{ width: 200 }}
+            date={this.state.dateTo}
+            mode="date"
+            placeholder="Select Date"
+            format="DD-MM-YYYY"
+            minDate="01-01-1950"
+            maxDate="01-01-2019"
+            confirmBtnText="Confirm"
+            cancelBtnText="Cancel"
+            customStyles={{
+              dateIcon: {
+                position: "absolute",
+                left: 0,
+                top: 4,
+                marginLeft: 0
+              },
+              dateInput: {
+                marginLeft: 36
+              }
+            }}
+            onDateChange={date => {
+              this.setState({ dateTo: date });
+            }}
+          ></DatePicker>
           <FlatList
             data={readings}
             renderItem={(item: any) => (
               <View key={item.item.timestamp}>
-                <Text>{item.item.temp_mean}</Text>
-                <Text>{item.item.tvoc_mean}</Text>
+                <Text>{item.item[query]}</Text>
               </View>
             )}
             keyExtractor={(item: any, index: number) => index.toString()}
