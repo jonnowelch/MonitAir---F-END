@@ -5,9 +5,17 @@ export interface CircleProps {
   title: string;
   reading: number;
   navigate: any;
+  sensor_id: any;
+  query: string;
 }
 
-const Circle: React.SFC<CircleProps> = ({ title, reading, navigate }) => {
+const Circle: React.SFC<CircleProps> = ({
+  title,
+  reading,
+  navigate,
+  sensor_id,
+  query
+}) => {
   return (
     <>
       <View style={styles.gridItem}>
@@ -15,7 +23,11 @@ const Circle: React.SFC<CircleProps> = ({ title, reading, navigate }) => {
           <Text
             style={styles.text}
             onPress={() => {
-              navigate("Analysis", { title: title });
+              navigate("Analysis", {
+                title: title,
+                sensor_id: sensor_id,
+                query: query
+              });
             }}
           >
             {reading}
