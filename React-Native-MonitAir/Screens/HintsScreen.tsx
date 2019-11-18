@@ -10,7 +10,7 @@ const HintsScreen: React.SFC<Props> = props => (
   <>
     <Header navigate={props.navigation.navigate} />
     <View style={styles.container}>
-      <Text> textInComponent </Text>
+      <Text> How to keep the air quality clean in your home </Text>
     </View>
   </>
 );

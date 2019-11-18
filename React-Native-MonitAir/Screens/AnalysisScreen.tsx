@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Text, View, Image, FlatList } from "react-native";
 import Header from "../Components/Header";
+import axios from "axios";
+import Loading from "../Components/Loading";
 
 export interface AnalysisProps {
   navigation: any;
@@ -8,6 +10,7 @@ export interface AnalysisProps {
 }
 interface State {
   readings: object[];
+  isLoading: boolean;
 }
 
 export default class AnalysisScreen extends React.Component<
@@ -18,24 +21,27 @@ export default class AnalysisScreen extends React.Component<
     super(props);
 
     this.state = {
-      readings: [
-        { time_of_reading: "1", reading: 20.0 },
-        { time_of_reading: "2", reading: 20.1 },
-        { time_of_reading: "3", reading: 20.2 },
-        { time_of_reading: "4", reading: 20.3 },
-        { time_of_reading: "5", reading: 20.2 },
-        { time_of_reading: "6", reading: 20.1 },
-        { time_of_reading: "7", reading: 20.2 },
-        { time_of_reading: "9", reading: 20.1 }
-      ]
+      readings: [],
+      isLoading: true
     };
   }
-
+  componentDidMount() {
+    axios
+      .get("http://brejconies.pythonanywhere.com/reading/00000000b7b25684")
+      .then(r => {
+        this.setState({ readings: r.data, isLoading: false });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
   render() {
     const title = JSON.stringify(this.props.navigation.getParam("title")).split(
       '"'
     )[1];
     const { readings } = this.state;
+    console.log(readings);
+    if (this.state.isLoading) return <Loading />;
     return (
       <>
         <Header navigate={this.props.navigation.navigate} />
@@ -50,9 +56,9 @@ export default class AnalysisScreen extends React.Component<
           <FlatList
             data={readings}
             renderItem={(item: any) => (
-              <View key={item.item.time_of_reading}>
-                <Text>{item.item.reading}</Text>
-                <Text>{item.item.time_of_reading}</Text>
+              <View key={item.item.timestamp}>
+                <Text>{item.item.temp_mean}</Text>
+                <Text>{item.item.tvoc_mean}</Text>
               </View>
             )}
             keyExtractor={(item: any, index: number) => index.toString()}

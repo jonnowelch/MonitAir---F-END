@@ -48,8 +48,7 @@ export default class LoginScreen extends Component<LoginProps, State> {
         .signInWithEmailAndPassword(email, password)
         .then(() => {
           this.props.navigation.navigate("Home", {
-            email,
-            username
+            email: this.state.email
           });
         })
         .catch(error => {
@@ -61,19 +60,12 @@ export default class LoginScreen extends Component<LoginProps, State> {
       <>
         <Header navigate={this.props.navigation.navigate} />
         <View>
-          <Text style={{ marginTop: 30 }}>Welcome To MonitAir!</Text>
           <View style={{ padding: 10, marginTop: 40 }}>
             <TextInput
               style={{ height: 40, borderColor: "black", borderWidth: 1 }}
               placeholder="Enter Email"
               value={this.state.email}
               onChangeText={email => this.setState({ email })}
-            />
-            <TextInput
-              style={{ height: 40, borderColor: "black", borderWidth: 1 }}
-              placeholder="Enter Username"
-              value={this.state.username}
-              onChangeText={username => this.setState({ username })}
             />
             <TextInput
               style={{ height: 40, borderColor: "black", borderWidth: 1 }}
