@@ -5,6 +5,7 @@ import Circle from "../Components/Circle";
 import Loading from "../Components/Loading";
 import axios from "axios";
 import { LinearGradient } from "expo-linear-gradient";
+import MainCircle from "../Components/MainCircle";
 
 export interface HomeProps {
   navigation: any;
@@ -20,7 +21,7 @@ interface State {
 export default class HomeScreen extends React.Component<HomeProps, State> {
   constructor(props: HomeProps) {
     super(props);
-
+    this.updateReadings = this.updateReadings.bind(this);
     this.state = {
       loggedInUser: [],
       isLoading: true,
@@ -57,13 +58,28 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
         console.log(error);
       });
   }
-  componentDidUpdate(prevState) {
-    const { loggedInUser } = this.state;
-    if (this.state.reading !== prevState.reading) {
-      axios.get(
-        `http://brejconies.pythonanywhere.com/most_recent_reading/${loggedInUser[0].sensor_id}`
-      );
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      this.state.reading.total_quality_mean !==
+      prevState.reading.total_quality_mean
+    ) {
+      this.updateReadings();
     }
+  }
+  updateReadings() {
+    const { loggedInUser } = this.state;
+    setInterval(() => {
+      return axios
+        .get(
+          `http://brejconies.pythonanywhere.com/most_recent_reading/${loggedInUser[0].sensor_id}`
+        )
+        .then(r => {
+          this.setState({ reading: r.data });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }, 10000);
   }
   render() {
     const { reading } = this.state;
@@ -78,6 +94,13 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
           mointAir!
         </Text>
         <View style={styles.container}>
+          <MainCircle
+            title="Air Quality - %"
+            navigate={this.props.navigation.navigate}
+            reading={reading.total_quality_mean}
+            sensor_id={sensor_id}
+            query="tvoc_mean"
+          />
           <Circle
             title="Temperature - °C"
             navigate={this.props.navigation.navigate}
@@ -98,13 +121,6 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
             reading={reading.humidity_mean}
             sensor_id={sensor_id}
             query="humidity_mean"
-          />
-          <Circle
-            title="Air Quality - PPM"
-            navigate={this.props.navigation.navigate}
-            reading={reading.tvoc_mean}
-            sensor_id={sensor_id}
-            query="tvoc_mean"
           />
           <Text style={{ color: "#13D0FF", marginTop: 20, marginBottom: 20 }}>
             Click the button below for hints and tips on how to keep the air
