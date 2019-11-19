@@ -1,5 +1,13 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Image, TextInput, Alert } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TextInput,
+  Alert,
+  ClippingRectangle
+} from "react-native";
 import Header from "../Components/Header";
 import firebase from "../firebase.js";
 import Loading from "../Components/Loading";
@@ -14,7 +22,7 @@ interface State {
   email: string;
   username: string;
   password: string;
-  errMsg: string;
+  errCode: string;
   isLoading: boolean;
 }
 
@@ -25,7 +33,7 @@ export default class LoginScreen extends Component<LoginProps, State> {
       email: "",
       username: "",
       password: "",
-      errMsg: undefined,
+      errCode: undefined,
       isLoading: true
     };
   }
@@ -33,14 +41,23 @@ export default class LoginScreen extends Component<LoginProps, State> {
     this.setState({ isLoading: false });
   }
   render() {
-    const { errMsg } = this.state;
-    if (errMsg)
-      Alert.alert("Login failed", errMsg, [
+    const { errCode } = this.state;
+    if (errCode) {
+      const userFacingErrMsg: string =
+        errCode === "auth/user-not-found"
+          ? "Looks like your email address isn't yet registered with us - sign in from the front screen!"
+          : errCode === "auth/invalid-email"
+          ? "Hmm... ...that's not an email address!"
+          : errCode === "auth/wrong-password"
+          ? "Uh-oh. Wrong password - try again!"
+          : "There was a problem, but it might be us - please check your details and try again";
+      Alert.alert("Login failed", userFacingErrMsg, [
         {
           text: "Try again",
-          onPress: () => this.setState({ errMsg: undefined })
+          onPress: () => this.setState({ errCode: undefined })
         }
       ]);
+    }
     const handleLogin = () => {
       const { isLoading } = this.state;
       if (isLoading) return <Loading />;
@@ -54,8 +71,9 @@ export default class LoginScreen extends Component<LoginProps, State> {
           });
         })
         .catch(error => {
-          const errMsg = error.message;
-          this.setState({ errMsg });
+          console.log(error.code, "<==error.code");
+          const errCode = String(error.code);
+          this.setState({ errCode });
         });
     };
     return (
