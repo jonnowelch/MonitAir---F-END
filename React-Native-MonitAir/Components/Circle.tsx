@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     color: "#3B7BFF"
   },
   gridItem: {
-    width: "30%",
+    width: "50%",
     justifyContent: "center",
     alignItems: "center"
   }

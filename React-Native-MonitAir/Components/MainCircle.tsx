@@ -58,6 +58,9 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 22,
     color: "#3B7BFF"
+  },
+  green: {
+    backgroundColor: "green"
   }
 });
 

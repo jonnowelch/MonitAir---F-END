@@ -95,7 +95,7 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
         </Text>
         <View style={styles.container}>
           <MainCircle
-            title="Air Quality - %"
+            title="Air Quality Index Score"
             navigate={this.props.navigation.navigate}
             reading={reading.total_quality_mean}
             sensor_id={sensor_id}
@@ -108,13 +108,13 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
             sensor_id={sensor_id}
             query="temp_mean"
           />
-          <Circle
+          {/* <Circle
             title="Pressure - Pa"
             navigate={this.props.navigation.navigate}
             reading={reading.pressure_mean}
             sensor_id={sensor_id}
             query="pressure_mean"
-          />
+          /> */}
           <Circle
             title="Humidity - %"
             navigate={this.props.navigation.navigate}
