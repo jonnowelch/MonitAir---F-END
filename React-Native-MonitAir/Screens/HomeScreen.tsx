@@ -91,7 +91,7 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
         <Header navigate={this.props.navigation.navigate} />
         <Text style={{ color: "#13D0FF" }}>
           Hi {loggedInUser[0] && loggedInUser[0].username} welcome to your
-          mointAir!
+          monitAir!
         </Text>
         <View style={styles.container}>
           <MainCircle
@@ -108,13 +108,6 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
             sensor_id={sensor_id}
             query="temp_mean"
           />
-          {/* <Circle
-            title="Pressure - Pa"
-            navigate={this.props.navigation.navigate}
-            reading={reading.pressure_mean}
-            sensor_id={sensor_id}
-            query="pressure_mean"
-          /> */}
           <Circle
             title="Humidity - %"
             navigate={this.props.navigation.navigate}

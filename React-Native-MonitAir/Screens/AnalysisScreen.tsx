@@ -38,7 +38,7 @@ export default class AnalysisScreen extends React.Component<
     const query = JSON.stringify(navigation.getParam("query")).split('"')[1];
     axios
       .get(
-        `http://brejconies.pythonanywhere.com/reading/${sensor_id}?measurement=${query}`
+        `http://brejconies.pythonanywhere.com/reading/${sensor_id}?measurement=${query}&lower_limit=2019-11-18&upper_limit=2019-11-19`
       )
       .then(r => {
         this.setState({ readings: r.data, isLoading: false });
