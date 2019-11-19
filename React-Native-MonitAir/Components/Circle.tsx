@@ -24,16 +24,16 @@ const Circle: React.SFC<CircleProps> = ({
             style={styles.text}
             onPress={() => {
               navigate("Analysis", {
-                title: title,
-                sensor_id: sensor_id,
-                query: query
+                title,
+                sensor_id,
+                query
               });
             }}
           >
             {reading}
           </Text>
         </View>
-        <Text style={styles.text}>{title}</Text>
+        <Text style={{ color: "#3B7BFF" }}>{title}</Text>
       </View>
     </>
   );
@@ -41,10 +41,10 @@ const Circle: React.SFC<CircleProps> = ({
 
 const styles = StyleSheet.create({
   circle: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    borderColor: "black",
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+    borderColor: "#13D0FF",
     borderWidth: 2,
     marginTop: 25,
     marginBottom: 5,
@@ -52,7 +52,8 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   text: {
-    fontSize: 22
+    fontSize: 22,
+    color: "#3B7BFF"
   },
   gridItem: {
     width: "50%",
