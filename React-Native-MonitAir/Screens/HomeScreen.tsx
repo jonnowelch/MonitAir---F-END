@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Button, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import Header from "../Components/Header";
 import React from "react";
 import Circle from "../Components/Circle";
@@ -99,7 +99,7 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
             navigate={this.props.navigation.navigate}
             reading={reading.total_quality_mean}
             sensor_id={sensor_id}
-            query="tvoc_mean"
+            query="total_quality_mean"
           />
           <Circle
             title="Temperature - °C"
@@ -121,7 +121,7 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
           </Text>
           <LinearGradient
             colors={["#3B7BFF", "#13D0FF"]}
-            style={{ padding: 15, borderRadius: 10 }}
+            style={{ padding: 15, borderRadius: 10, marginTop: 10 }}
           >
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate("Hints")}

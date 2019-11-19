@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Modal, Button } from "react-native";
 
 interface Props {
   title: string;
@@ -11,13 +11,15 @@ interface Props {
 
 interface State {
   isLoading: boolean;
+  modalVisible: boolean;
 }
 
 export default class MainCircle extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      isLoading: true
+      isLoading: true,
+      modalVisible: false
     };
   }
   componentDidMount() {
@@ -37,13 +39,12 @@ export default class MainCircle extends React.Component<Props, State> {
     const query = this.props.query;
     return (
       <View style={styles.gridItem}>
-        {/* <View style={styles.circle}> */}
         <View
           style={{
-            width: 140,
-            height: 140,
-            borderRadius: 70,
-            borderColor: "#13D0FF",
+            width: 180,
+            height: 180,
+            borderRadius: 90,
+            borderColor: "#ffffe6",
             borderWidth: 2,
             marginTop: 25,
             marginBottom: 5,
@@ -75,10 +76,10 @@ const setBackgroundColour = reading => {
     return "#66ff66";
   }
   if (reading > 30 && reading <= 50) {
-    return "#1aff1a";
+    return "#9fff80";
   }
   if (reading > 50 && reading <= 70) {
-    return "#ffdb4d";
+    return "#79ff4d";
   }
   if (reading > 70 && reading <= 100) {
     return "#ffd633";
@@ -110,25 +111,14 @@ const setBackgroundColour = reading => {
 };
 
 const styles = StyleSheet.create({
-  // circle: {
-  //   width: 140,
-  //   height: 140,
-  //   borderRadius: 70,
-  //   borderColor: "#13D0FF",
-  //   borderWidth: 2,
-  //   marginTop: 25,
-  //   marginBottom: 5,
-  //   justifyContent: "center",
-  //   alignItems: "center",
-  //   backgroundColor: setBackgroundColour()
-  // },
   gridItem: {
     width: "100%",
     justifyContent: "center",
     alignItems: "center"
   },
   text: {
-    fontSize: 22,
-    color: "#3B7BFF"
+    fontSize: 44,
+    fontWeight: "bold",
+    color: "#ffffe6"
   }
 });

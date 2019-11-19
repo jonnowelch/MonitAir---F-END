@@ -49,7 +49,7 @@ export default class Circle extends React.Component<CircleProps, State> {
               width: 140,
               height: 140,
               borderRadius: 70,
-              borderColor: "#13D0FF",
+              borderColor: "#ffffe6",
               borderWidth: 2,
               marginTop: 25,
               marginBottom: 5,
@@ -108,20 +108,10 @@ const setBackgroundColour = (reading, title) => {
 };
 
 const styles = StyleSheet.create({
-  // circle: {
-  //   width: 90,
-  //   height: 90,
-  //   borderRadius: 45,
-  //   borderColor: "#13D0FF",
-  //   borderWidth: 2,
-  //   marginTop: 25,
-  //   marginBottom: 5,
-  //   justifyContent: "center",
-  //   alignItems: "center"
-  // },
   text: {
-    fontSize: 22,
-    color: "#3B7BFF"
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#ffffe6"
   },
   gridItem: {
     width: "50%",

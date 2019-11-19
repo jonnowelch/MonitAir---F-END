@@ -22,7 +22,7 @@ const HintsScreen: React.SFC<Props> = props => (
           padding: 10,
           margin: 10,
           height: "100%",
-          borderColor: "#3B7BFF",
+          borderColor: "#13D0FF",
           borderWidth: 2
         }}
       >
