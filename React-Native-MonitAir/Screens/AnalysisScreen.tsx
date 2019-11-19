@@ -73,9 +73,9 @@ export default class AnalysisScreen extends React.Component<
             date={this.state.dateFrom}
             mode="date"
             placeholder="Select Date"
-            format="DD-MM-YYYY"
-            minDate="01-01-1950"
-            maxDate="01-01-2019"
+            format="YYYY-MM-DD"
+            minDate="2018-01-01"
+            maxDate="2019-11-22"
             confirmBtnText="Confirm"
             cancelBtnText="Cancel"
             customStyles={{
@@ -99,9 +99,9 @@ export default class AnalysisScreen extends React.Component<
             date={this.state.dateTo}
             mode="date"
             placeholder="Select Date"
-            format="DD-MM-YYYY"
-            minDate="01-01-1950"
-            maxDate="01-01-2019"
+            format="YYYY-MM-DD"
+            minDate="2018-01-01"
+            maxDate="2019-11-22"
             confirmBtnText="Confirm"
             cancelBtnText="Cancel"
             customStyles={{
