@@ -64,12 +64,12 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
         username,
         sensor_id
       } = this.state;
-
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
         .then(() => {
           const userID = firebase.auth().currentUser!.uid;
+          console.log(userID);
           axios.post("http://brejconies.pythonanywhere.com/user", {
             first_name,
             surname,
@@ -78,18 +78,16 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
             sensor_id,
             user_id: userID
           });
+          console.log(email, first_name, surname, username, sensor_id);
         })
         .then(() => {
-          this.props.navigation.navigate("Home", {
-            first_name: this.state.first_name,
-            surname: this.state.surname,
-            email: this.state.email,
-            username: this.state.username
-          });
+          this.props.navigation.navigate("Login");
         })
-        .catch((error: any) => {
-          const errMsg = error.message;
-          this.setState({ errMsg });
+        .catch((response: any) => {
+          console.log(Object.keys(response));
+          // const errMsg = response.body.msg;
+          // this.setState({ errMsg });
+          // console.log(errMsg);
         });
     };
     return (
