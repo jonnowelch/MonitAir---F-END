@@ -1,13 +1,5 @@
 import React, { Component } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TextInput,
-  Alert,
-  ClippingRectangle
-} from "react-native";
+import { Text, View, TextInput, Alert, Image } from "react-native";
 import Header from "../Components/Header";
 import firebase from "../firebase.js";
 import Loading from "../Components/Loading";
@@ -84,8 +76,20 @@ export default class LoginScreen extends Component<LoginProps, State> {
         <View style={{ alignSelf: "center" }}>
           <Text style={{ fontSize: 20, paddingTop: 20, color: "#13D0FF" }}>
             Please login:
+            <Image
+              source={{
+                uri:
+                  "http://3.bp.blogspot.com/-VjBLo3zVT6E/Uh8WiPorbeI/AAAAAAAABm0/v5Q2cpGVsCA/s1600/cloudtest001.gif"
+              }}
+              style={{
+                height: 80,
+                width: 80,
+                alignSelf: "flex-end",
+                paddingLeft: 20
+              }}
+            ></Image>
           </Text>
-          <View style={{ paddingBottom: 10, marginTop: 40 }}>
+          <View style={{ paddingBottom: 20, marginTop: 40 }}>
             <TextInput
               style={{
                 height: 40,
@@ -100,7 +104,7 @@ export default class LoginScreen extends Component<LoginProps, State> {
               onChangeText={email => this.setState({ email })}
             />
           </View>
-          <View>
+          <View style={{ paddingBottom: 20 }}>
             <TextInput
               style={{
                 height: 40,
@@ -128,27 +132,39 @@ export default class LoginScreen extends Component<LoginProps, State> {
               style={{
                 padding: 15,
                 borderRadius: 10,
-                justifyContent: "center"
+                justifyContent: "center",
+                alignItems: "center"
               }}
             >
-              <TouchableOpacity style={{ width: 200 }} onPress={handleLogin}>
+              <TouchableOpacity onPress={handleLogin}>
                 <Text style={{ color: "white", alignSelf: "center" }}>
                   Login
                 </Text>
               </TouchableOpacity>
             </LinearGradient>
           </View>
-          <View style={{ width: "50%", alignSelf: "center" }}>
+          <View style={{ justifyContent: "center" }}>
             <Text
               style={{
                 marginTop: 20,
                 paddingTop: 20,
-                paddingBottom: 20,
-                color: "#13D0FF"
+                marginLeft: 20,
+                marginRight: 20,
+                color: "#13D0FF",
+                alignSelf: "center"
               }}
             >
               Don't have an account? Hit the button below to get started!
             </Text>
+          </View>
+          <View
+            style={{
+              width: 200,
+              alignSelf: "center",
+              justifyContent: "center",
+              marginTop: 20
+            }}
+          >
             <LinearGradient
               colors={["#3B7BFF", "#13D0FF"]}
               style={{ padding: 15, borderRadius: 10 }}
