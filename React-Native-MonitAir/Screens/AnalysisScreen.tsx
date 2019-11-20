@@ -55,7 +55,11 @@ export default class AnalysisScreen extends React.Component<
           <View style={styles.container}>
             <Button title="<" onPress={this.handleDateChange} />
             <Text>{JSON.stringify(date).slice(1, 11)}</Text>
-            <Button title=">" onPress={this.handleDateChange} disabled={true} />
+            <Button
+              title=">"
+              onPress={this.handleDateChange}
+              disabled={date >= new Date() ? true : false}
+            />
           </View>
         </View>
       </>
@@ -63,6 +67,7 @@ export default class AnalysisScreen extends React.Component<
   }
 
   handleDateChange = event => {
+    console.log(event);
     this.setState(prevState => {
       const newDate = new Date(prevState.date);
       newDate.setDate(newDate.getDate() - 1);
