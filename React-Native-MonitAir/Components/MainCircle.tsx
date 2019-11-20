@@ -64,8 +64,8 @@ export default class MainCircle extends React.Component<Props, State> {
             {reading}
           </Text>
         </View>
-
         <Text style={{ color: '#13D0FF', fontSize: 18 }}>{title}</Text>
+
       </View>
     );
   }
