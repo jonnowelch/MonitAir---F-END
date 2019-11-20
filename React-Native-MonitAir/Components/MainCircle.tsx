@@ -5,21 +5,19 @@ interface Props {
   title: string;
   reading: number;
   navigate: any;
-  sensor_id: any;
+  sensor_id: string;
   query: string;
 }
 
 interface State {
   isLoading: boolean;
-  modalVisible: boolean;
 }
 
 export default class MainCircle extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      isLoading: true,
-      modalVisible: false
+      isLoading: true
     };
   }
   componentDidMount() {
@@ -79,7 +77,7 @@ const setBackgroundColour = reading => {
     return "#9fff80";
   }
   if (reading > 50 && reading <= 70) {
-    return "#79ff4d";
+    return "#ffe066";
   }
   if (reading > 70 && reading <= 100) {
     return "#ffd633";

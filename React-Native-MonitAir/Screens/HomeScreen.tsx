@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import Header from "../Components/Header";
 import React from "react";
 import Circle from "../Components/Circle";
@@ -6,6 +6,8 @@ import Loading from "../Components/Loading";
 import axios from "axios";
 import { LinearGradient } from "expo-linear-gradient";
 import MainCircle from "../Components/MainCircle";
+import EasterEgg from "../Components/EasterEgg";
+import { TouchableHighlight } from "react-native-gesture-handler";
 
 export interface HomeProps {
   navigation: any;
@@ -16,6 +18,7 @@ interface State {
   reading: any;
   errMsg: any;
   loggedInUser: any;
+  easterEgg: boolean;
 }
 
 export default class HomeScreen extends React.Component<HomeProps, State> {
@@ -26,7 +29,8 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
       loggedInUser: [],
       isLoading: true,
       reading: {},
-      errMsg: null
+      errMsg: null,
+      easterEgg: false
     };
   }
   componentDidMount() {
@@ -86,13 +90,24 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
     const { loggedInUser } = this.state;
     const sensor_id = loggedInUser[0] && loggedInUser[0].sensor_id;
     if (this.state.isLoading) return <Loading />;
+    if (this.state.easterEgg) return <EasterEgg />;
     return (
       <>
         <Header navigate={this.props.navigation.navigate} />
-        <Text style={{ color: "#13D0FF" }}>
-          Hi {loggedInUser[0] && loggedInUser[0].username} welcome to your
-          monitAir!
-        </Text>
+        <TouchableHighlight onPress={() => this.setState({ easterEgg: true })}>
+          <Text style={{ color: "#13D0FF" }}>
+            Hi {loggedInUser[0] && loggedInUser[0].username} welcome to your
+            monitAir!
+            <Image
+              style={{ height: 50, width: 50, alignSelf: "flex-end" }}
+              source={{
+                uri:
+                  "http://3.bp.blogspot.com/-VjBLo3zVT6E/Uh8WiPorbeI/AAAAAAAABm0/v5Q2cpGVsCA/s1600/cloudtest001.gif"
+              }}
+            ></Image>
+          </Text>
+        </TouchableHighlight>
+
         <View style={styles.container}>
           <MainCircle
             title="Air Quality Index Score"
@@ -115,18 +130,23 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
             sensor_id={sensor_id}
             query="humidity_mean"
           />
-          <Text style={{ color: "#13D0FF", marginTop: 20, marginBottom: 20 }}>
+          <Text style={{ color: "#13D0FF", marginTop: 20, marginBottom: 10 }}>
             Click the button below for hints and tips on how to keep the air
             quality clean in your home!
           </Text>
           <LinearGradient
             colors={["#3B7BFF", "#13D0FF"]}
-            style={{ padding: 15, borderRadius: 10, marginTop: 10 }}
+            style={{ padding: 15, borderRadius: 10 }}
           >
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate("Hints")}
             >
-              <Text style={{ color: "white", alignSelf: "center" }}>
+              <Text
+                style={{
+                  color: "white",
+                  alignSelf: "center"
+                }}
+              >
                 Hints & Tips
               </Text>
             </TouchableOpacity>
