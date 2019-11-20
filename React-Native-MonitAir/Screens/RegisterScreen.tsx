@@ -158,11 +158,7 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
                 alignItems: "center"
               }}
             >
-              <TouchableOpacity
-                onPress={() => {
-                  this.props.navigation.navigate("Home");
-                }}
-              >
+              <TouchableOpacity onPress={() => handleSubmit()}>
                 <Text style={{ color: "white", alignSelf: "center" }}>
                   Submit
                 </Text>
