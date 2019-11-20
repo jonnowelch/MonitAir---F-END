@@ -74,7 +74,6 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
         username,
         sensor_id
       } = this.state;
-
       const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,}$/i;
 
       if (!regex.test(email)) {
@@ -117,12 +116,7 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
           });
         })
         .then(() => {
-          this.props.navigation.navigate("Home", {
-            first_name: this.state.first_name,
-            surname: this.state.surname,
-            email: this.state.email,
-            username: this.state.username
-          });
+          this.props.navigation.navigate("Login");
         })
         .catch((error: any) => {
           console.log(error.code);
