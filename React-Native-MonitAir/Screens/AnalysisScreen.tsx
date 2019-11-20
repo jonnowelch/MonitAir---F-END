@@ -42,8 +42,9 @@ export default class AnalysisScreen extends React.Component<
       .then(({ data }) => {
         data = data.map(dataItem => {
           const time = new Date(dataItem.timestamp);
-          const formattedTime = time.getTime();
-          dataItem.x = formattedTime;
+          dataItem.x = time;
+          // const formattedTime = time.getTime();
+          // dataItem.x = formattedTime;
           delete dataItem.timestamp;
           const measurement = dataItem[query];
           dataItem.y = measurement;
@@ -68,10 +69,11 @@ export default class AnalysisScreen extends React.Component<
           <VictoryChart theme={VictoryTheme.material}>
             <VictoryLine
               style={{
-                data: { stroke: '#c43a31' },
+                data: { stroke: '#3B7BFF' },
                 parent: { border: '1px solid #ccc' }
               }}
               data={readings}
+              interpolation="basis"
             />
           </VictoryChart>
 
