@@ -1,5 +1,6 @@
+import { VictoryChart, VictoryLine, VictoryTheme } from 'victory-native';
 import React, { Component } from 'react';
-import { Text, View, Image, FlatList } from 'react-native';
+import { Text, View, Image, FlatList, StyleSheet } from 'react-native';
 import Header from '../Components/Header';
 import axios from 'axios';
 import Loading from '../Components/Loading';
@@ -12,8 +13,7 @@ export interface AnalysisProps {
 interface State {
   readings: object[];
   isLoading: boolean;
-  dateFrom: Date;
-  dateTo: Date;
+  // date: string
 }
 
 export default class AnalysisScreen extends React.Component<
@@ -25,9 +25,8 @@ export default class AnalysisScreen extends React.Component<
 
     this.state = {
       readings: [],
-      isLoading: true,
-      dateFrom: null,
-      dateTo: null
+      isLoading: true
+      // date:
     };
   }
   componentDidMount() {
@@ -38,10 +37,20 @@ export default class AnalysisScreen extends React.Component<
     const query = JSON.stringify(navigation.getParam('query')).split('"')[1];
     axios
       .get(
-        `http://brejconies.pythonanywhere.com/reading/${sensor_id}?measurement=${query}&lower_limit=2019-11-18&upper_limit=2019-11-19`
+        `http://brejconies.pythonanywhere.com/reading/${sensor_id}?measurement=${query}&lower_limit=2019-11-20&upper_limit=2019-11-20`
       )
-      .then(r => {
-        this.setState({ readings: r.data, isLoading: false });
+      .then(({ data }) => {
+        data = data.map(dataItem => {
+          const time = new Date(dataItem.timestamp);
+          const formattedTime = time.getTime();
+          dataItem.x = formattedTime;
+          delete dataItem.timestamp;
+          const measurement = dataItem[query];
+          dataItem.y = measurement;
+          delete dataItem[query];
+          return dataItem;
+        });
+        this.setState({ readings: data, isLoading: false });
       })
       .catch(err => {
         console.log(err);
@@ -50,88 +59,34 @@ export default class AnalysisScreen extends React.Component<
   render() {
     const { navigation } = this.props;
     const query = JSON.stringify(navigation.getParam('query')).split('"')[1];
-    const title = JSON.stringify(this.props.navigation.getParam('title')).split(
-      '"'
-    )[1];
     const { readings } = this.state;
     if (this.state.isLoading) return <Loading />;
     return (
       <>
-        <Header navigate={this.props.navigation.navigate} />
-        <View>
-          <Text style={{ fontFamily: 'Quicksand-SemiBold' }}>
-            Analysis Screen for {title}
-          </Text>
-          <Image
-            style={{ width: 250, height: 250 }}
-            source={{
-              uri: 'https://media.giphy.com/media/xT77XKxcPqxIZqUrwk/giphy.gif'
-            }}
-          />
-          <Text>Select date range to see analysis</Text>
-          <Text>Date from</Text>
-          <DatePicker
-            style={{ width: 200 }}
-            date={this.state.dateFrom}
-            mode="date"
-            placeholder="Select Date"
-            format="YYYY-MM-DD"
-            minDate="2018-01-01"
-            maxDate="2019-11-22"
-            confirmBtnText="Confirm"
-            cancelBtnText="Cancel"
-            customStyles={{
-              dateIcon: {
-                position: 'absolute',
-                left: 0,
-                top: 4,
-                marginLeft: 0
-              },
-              dateInput: {
-                marginLeft: 36
-              }
-            }}
-            onDateChange={date => {
-              this.setState({ dateFrom: date });
-            }}
-          ></DatePicker>
-          <Text>Date To</Text>
-          <DatePicker
-            style={{ width: 200 }}
-            date={this.state.dateTo}
-            mode="date"
-            placeholder="Select Date"
-            format="YYYY-MM-DD"
-            minDate="2018-01-01"
-            maxDate="2019-11-22"
-            confirmBtnText="Confirm"
-            cancelBtnText="Cancel"
-            customStyles={{
-              dateIcon: {
-                position: 'absolute',
-                left: 0,
-                top: 4,
-                marginLeft: 0
-              },
-              dateInput: {
-                marginLeft: 36
-              }
-            }}
-            onDateChange={date => {
-              this.setState({ dateTo: date });
-            }}
-          ></DatePicker>
-          <FlatList
-            data={readings}
-            renderItem={(item: any) => (
-              <View key={item.item.timestamp}>
-                <Text>{item.item[query]}</Text>
-              </View>
-            )}
-            keyExtractor={(item: any, index: number) => index.toString()}
-          />
+        <Header navigate={this.props.navigation} />
+        <View style={styles.container}>
+          <VictoryChart theme={VictoryTheme.material}>
+            <VictoryLine
+              style={{
+                data: { stroke: '#c43a31' },
+                parent: { border: '1px solid #ccc' }
+              }}
+              data={readings}
+            />
+          </VictoryChart>
+
+          <Text>{JSON.stringify(new Date())}</Text>
         </View>
       </>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f5fcff'
+  }
+});
