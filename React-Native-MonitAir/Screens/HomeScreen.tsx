@@ -89,7 +89,7 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
     return (
       <>
         <Header navigate={this.props.navigation.navigate} />
-        <Text style={{ color: "#13D0FF", fontFamily: "sans-serif" }}>
+        <Text style={{ color: "#13D0FF" }}>
           Hi {loggedInUser[0] && loggedInUser[0].username} welcome to your
           monitAir!
         </Text>
