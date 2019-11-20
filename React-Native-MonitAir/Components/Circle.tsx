@@ -71,7 +71,9 @@ export default class Circle extends React.Component<CircleProps, State> {
               {reading}
             </Text>
           </View>
-          <Text style={{ color: "#3B7BFF" }}>{title}</Text>
+          <Text style={{ color: "#13D0FF", fontSize: 16, marginBottom: 20 }}>
+            {title}
+          </Text>
         </View>
       </>
     );

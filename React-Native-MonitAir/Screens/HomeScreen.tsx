@@ -98,22 +98,21 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
             this.props.navigation.navigate("EasterEgg");
           }}
         >
-          <Text style={{ color: "#13D0FF" }}>
+          <Text style={{ color: "#3B7BFF", alignSelf: "center" }}>
             Hi {loggedInUser[0] && loggedInUser[0].username} welcome to your
             monitAir!
-            <Image
+            {/* <Image
               style={{ height: 50, width: 50, alignSelf: "flex-end" }}
               source={{
                 uri:
                   "http://3.bp.blogspot.com/-VjBLo3zVT6E/Uh8WiPorbeI/AAAAAAAABm0/v5Q2cpGVsCA/s1600/cloudtest001.gif"
               }}
-            ></Image>
+            ></Image> */}
           </Text>
         </TouchableHighlight>
-
         <View style={styles.container}>
           <MainCircle
-            title="Air Quality Index Score"
+            title="Air Quality Index"
             navigate={this.props.navigation.navigate}
             reading={reading.total_quality_mean}
             sensor_id={sensor_id}
@@ -133,7 +132,7 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
             sensor_id={sensor_id}
             query="humidity_mean"
           />
-          <Text style={{ color: "#13D0FF", marginTop: 20, marginBottom: 10 }}>
+          <Text style={{ color: "#3B7BFF", margin: 20, alignSelf: "center" }}>
             Click the button below for hints and tips on how to keep the air
             quality clean in your home!
           </Text>

@@ -39,8 +39,8 @@ const EasterEgg: React.SFC<Props> = props => (
         }}
       >
         The team would like to thank you so much for using and enjoying our app!
-        Friendly reminder to please always ensure the co3 levels in your home
-        are at a safe level!
+        Friendly reminder to please always ensure that the co3 levels in your
+        home are at a safe level!
       </Text>
       <View
         style={{

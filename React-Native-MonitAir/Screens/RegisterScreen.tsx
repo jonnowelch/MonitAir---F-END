@@ -1,9 +1,18 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Button, TextInput, Alert } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  TextInput,
+  Alert,
+  ScrollView
+} from "react-native";
 import Header from "../Components/Header";
 import firebase from "../firebase.js";
 import axios from "axios";
 import Loading from "../Components/Loading";
+import { LinearGradient } from "expo-linear-gradient";
 
 export interface RegisterProps {
   navigation: any;
@@ -87,63 +96,83 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
     return (
       <>
         <Header navigate={this.props.navigation.navigate} />
-        <View>
-          <Text style={{ fontSize: 20, paddingBottom: 20, color: "#13D0FF" }}>
-            Look how far we've come....
-          </Text>
-          <View style={{ paddingBottom: 10 }}>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter Forename"
-              value={this.state.first_name}
-              onChangeText={first_name => this.setState({ first_name })}
-            ></TextInput>
+        <ScrollView>
+          <View>
+            <Text style={{ fontSize: 20, paddingBottom: 20, color: "#13D0FF" }}>
+              Look how far we've come....
+            </Text>
+            <View style={{ paddingBottom: 10 }}>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter Forename"
+                value={this.state.first_name}
+                onChangeText={first_name => this.setState({ first_name })}
+              ></TextInput>
+            </View>
+            <View style={{ paddingBottom: 10 }}>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter Surname"
+                value={this.state.surname}
+                onChangeText={surname => this.setState({ surname })}
+              ></TextInput>
+            </View>
+            <View style={{ paddingBottom: 10 }}>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter Email"
+                value={this.state.email}
+                onChangeText={email => this.setState({ email })}
+              ></TextInput>
+            </View>
+            <View style={{ paddingBottom: 10 }}>
+              <TextInput
+                style={styles.input}
+                placeholder="Create Usernmae"
+                value={this.state.username}
+                onChangeText={username => this.setState({ username })}
+              ></TextInput>
+            </View>
+            <View style={{ paddingBottom: 10 }}>
+              <TextInput
+                style={styles.input}
+                placeholder="Create Password"
+                value={this.state.password}
+                secureTextEntry={true}
+                onChangeText={password => this.setState({ password })}
+              ></TextInput>
+            </View>
+            <View style={{ paddingBottom: 10 }}>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter Sensor ID"
+                value={this.state.sensor_id}
+                onChangeText={sensor_id => this.setState({ sensor_id })}
+              ></TextInput>
+            </View>
+            <View style={{ width: 200, marginTop: 20, alignSelf: "center" }}>
+              <LinearGradient
+                colors={["#3B7BFF", "#13D0FF"]}
+                style={{
+                  padding: 15,
+                  borderRadius: 10,
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.navigate("Home");
+                  }}
+                >
+                  <Text style={{ color: "white", alignSelf: "center" }}>
+                    Submit
+                  </Text>
+                </TouchableOpacity>
+              </LinearGradient>
+            </View>
           </View>
-          <View style={{ paddingBottom: 10 }}>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter Surname"
-              value={this.state.surname}
-              onChangeText={surname => this.setState({ surname })}
-            ></TextInput>
-          </View>
-          <View style={{ paddingBottom: 10 }}>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter Email"
-              value={this.state.email}
-              onChangeText={email => this.setState({ email })}
-            ></TextInput>
-          </View>
-          <View style={{ paddingBottom: 10 }}>
-            <TextInput
-              style={styles.input}
-              placeholder="Create Usernmae"
-              value={this.state.username}
-              onChangeText={username => this.setState({ username })}
-            ></TextInput>
-          </View>
-          <View style={{ paddingBottom: 10 }}>
-            <TextInput
-              style={styles.input}
-              placeholder="Create Password"
-              value={this.state.password}
-              secureTextEntry={true}
-              onChangeText={password => this.setState({ password })}
-            ></TextInput>
-          </View>
-          <View style={{ paddingBottom: 10 }}>
-            <TextInput
-              style={styles.input}
-              placeholder="Enter Sensor ID"
-              value={this.state.sensor_id}
-              onChangeText={sensor_id => this.setState({ sensor_id })}
-            ></TextInput>
-          </View>
-          <View style={{ width: 200, marginTop: 20, alignSelf: "center" }}>
-            <Button title="Submit" color="green" onPress={handleSubmit} />
-          </View>
-        </View>
+        </ScrollView>
       </>
     );
   }
@@ -155,6 +184,7 @@ const styles = StyleSheet.create({
     width: 300,
     alignSelf: "center",
     borderColor: "#3B7BFF",
-    borderWidth: 1
+    borderWidth: 1,
+    paddingLeft: 15
   }
 });
