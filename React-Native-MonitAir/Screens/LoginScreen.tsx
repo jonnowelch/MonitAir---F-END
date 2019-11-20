@@ -63,7 +63,7 @@ export default class LoginScreen extends Component<LoginProps, State> {
           });
         })
         .catch(error => {
-          console.log(error.code, "<==error.code");
+          // console.log(error.code, "<==error.code");
           const errCode = String(error.code);
           this.setState({ errCode });
         });

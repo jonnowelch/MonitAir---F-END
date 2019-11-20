@@ -31,7 +31,6 @@ export default class App extends React.Component {
     setTimeout(() => this.setState({ isLoading: false }), 1000);
   }
   render() {
-    if (this.state.isLoading) return <Loading />;
-    return <AppContainer />;
+    return this.state.isLoading ? <Loading /> : <AppContainer />;
   }
 }

@@ -23,7 +23,7 @@ interface State {
   email: string;
   password: string;
   username: string;
-  errMsg: string;
+  errCode: string;
   sensor_id: string;
   isLoading: boolean;
 }
@@ -38,7 +38,7 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
       password: "",
       username: "",
       sensor_id: "",
-      errMsg: undefined,
+      errCode: undefined,
       isLoading: true
     };
   }
@@ -47,14 +47,24 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
   }
   render() {
     if (this.state.isLoading) return <Loading />;
-    const { errMsg } = this.state;
-    if (errMsg)
-      Alert.alert("Registration Failed", errMsg, [
+    const { errCode } = this.state;
+    if (errCode) {
+      const userFacingErrMsg =
+        errCode === "auth/invalid-email"
+          ? "Oops! Looks like your email address is invalid; please try again!"
+          : errCode === "auth/email-already-in-use"
+          ? "Looks like you've already signed up! Please use login screen to log in!"
+          : errCode === "auth/weak-password"
+          ? "Your password is up to you, but it needs to be stronger than that!"
+          : "Fallback error message";
+      Alert.alert("Registration Failed", userFacingErrMsg, [
         {
           text: "Please try again",
-          onPress: () => this.setState({ errMsg: undefined })
+          onPress: () => this.setState({ errCode: undefined })
         }
       ]);
+    }
+
     const handleSubmit = () => {
       const {
         email,
@@ -64,6 +74,33 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
         username,
         sensor_id
       } = this.state;
+      const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,}$/i;
+
+      if (!regex.test(email)) {
+        alert("Invalid email format");
+        return;
+      }
+      if (!first_name.trim().length) {
+        alert("Please enter a first name");
+        return;
+      }
+      if (!surname.trim().length) {
+        alert("Please enter a surname");
+        return;
+      }
+      if (username.trim().length < 4) {
+        alert("Username must be 4 or more characters");
+        return;
+      }
+      if (!password.length) {
+        alert("Ooops! You forgot to enter a password!");
+        return;
+      }
+      if (sensor_id.length !== 16) {
+        alert("Sensor ID will be 16 characters");
+        return;
+      }
+
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
@@ -81,10 +118,10 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
         .then(() => {
           this.props.navigation.navigate("Login");
         })
-        .catch((response: any) => {
-          const errMsg = response.body.msg;
-          // this.setState({ errMsg });
-          console.log(errMsg);
+        .catch((error: any) => {
+          console.log(error.code);
+          const errCode = error.code;
+          this.setState({ errCode });
         });
     };
     return (
@@ -92,7 +129,7 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
         <Header navigate={this.props.navigation.navigate} />
         <View>
           <Text style={{ fontSize: 20, paddingBottom: 20, color: "#13D0FF" }}>
-            Look how far we've come....
+            Please enter your details:
           </Text>
           <View style={{ paddingBottom: 10 }}>
             <TextInput
@@ -116,12 +153,13 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
               placeholder="Enter Email"
               value={this.state.email}
               onChangeText={email => this.setState({ email })}
+              keyboardType="email-address"
             ></TextInput>
           </View>
           <View style={{ paddingBottom: 10 }}>
             <TextInput
               style={styles.input}
-              placeholder="Create Usernmae"
+              placeholder="Create Username"
               value={this.state.username}
               onChangeText={username => this.setState({ username })}
             ></TextInput>
