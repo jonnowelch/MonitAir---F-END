@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, TextInput, Alert, Image } from "react-native";
+import { Text, View, TextInput, Alert, Image, StyleSheet } from "react-native";
 import Header from "../Components/Header";
 import firebase from "../firebase.js";
 import Loading from "../Components/Loading";
@@ -73,8 +73,15 @@ export default class LoginScreen extends Component<LoginProps, State> {
         <View style={{ paddingTop: 20 }}>
           <Header navigate={this.props.navigation.navigate} />
         </View>
-        <View style={{ alignSelf: "center" }}>
-          <Text style={{ fontSize: 20, paddingTop: 20, color: "#13D0FF" }}>
+        <View style={{ alignSelf: "center", flex: 1 }}>
+          <Text
+            style={{
+              fontSize: 20,
+              paddingTop: 20,
+              color: "#13D0FF",
+              marginLeft: 10
+            }}
+          >
             Please login:
             <Image
               source={{
@@ -91,14 +98,7 @@ export default class LoginScreen extends Component<LoginProps, State> {
           </Text>
           <View style={{ paddingBottom: 20, marginTop: 40 }}>
             <TextInput
-              style={{
-                height: 40,
-                width: 300,
-                borderColor: "#3B7BFF",
-                borderWidth: 1,
-                alignSelf: "center",
-                paddingBottom: 10
-              }}
+              style={styles.input}
               placeholder="Enter Email"
               value={this.state.email}
               onChangeText={email => this.setState({ email })}
@@ -106,34 +106,19 @@ export default class LoginScreen extends Component<LoginProps, State> {
           </View>
           <View style={{ paddingBottom: 20 }}>
             <TextInput
-              style={{
-                height: 40,
-                width: 300,
-                alignSelf: "center",
-                borderColor: "#3B7BFF",
-                borderWidth: 1
-              }}
+              style={styles.input}
               placeholder="Enter Password"
               value={this.state.password}
               secureTextEntry={true}
               onChangeText={password => this.setState({ password })}
             />
           </View>
-          <View
-            style={{
-              width: 200,
-              alignSelf: "center",
-              justifyContent: "center",
-              marginTop: 20
-            }}
-          >
+          <View style={styles.buttonView}>
             <LinearGradient
               colors={["#3B7BFF", "#13D0FF"]}
               style={{
                 padding: 15,
-                borderRadius: 10,
-                justifyContent: "center",
-                alignItems: "center"
+                borderRadius: 10
               }}
             >
               <TouchableOpacity onPress={handleLogin}>
@@ -157,14 +142,7 @@ export default class LoginScreen extends Component<LoginProps, State> {
               Don't have an account? Hit the button below to get started!
             </Text>
           </View>
-          <View
-            style={{
-              width: 200,
-              alignSelf: "center",
-              justifyContent: "center",
-              marginTop: 20
-            }}
-          >
+          <View style={styles.buttonView}>
             <LinearGradient
               colors={["#3B7BFF", "#13D0FF"]}
               style={{ padding: 15, borderRadius: 10 }}
@@ -186,3 +164,20 @@ export default class LoginScreen extends Component<LoginProps, State> {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  input: {
+    height: 40,
+    width: 300,
+    borderColor: "#3B7BFF",
+    borderWidth: 1,
+    alignSelf: "center",
+    paddingLeft: 15
+  },
+  buttonView: {
+    width: 200,
+    alignSelf: "center",
+    justifyContent: "center",
+    marginTop: 20
+  }
+});

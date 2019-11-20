@@ -1,9 +1,17 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Button, TextInput, Alert } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  TextInput,
+  Alert
+} from "react-native";
 import Header from "../Components/Header";
 import firebase from "../firebase.js";
 import axios from "axios";
 import Loading from "../Components/Loading";
+import { LinearGradient } from "expo-linear-gradient";
 
 export interface RegisterProps {
   navigation: any;
@@ -180,7 +188,25 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
             ></TextInput>
           </View>
           <View style={{ width: 200, marginTop: 20, alignSelf: "center" }}>
-            <Button title="Submit" color="green" onPress={handleSubmit} />
+            <LinearGradient
+              colors={["#3B7BFF", "#13D0FF"]}
+              style={{
+                padding: 15,
+                borderRadius: 10,
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate("Home");
+                }}
+              >
+                <Text style={{ color: "white", alignSelf: "center" }}>
+                  Submit
+                </Text>
+              </TouchableOpacity>
+            </LinearGradient>
           </View>
         </View>
       </>
@@ -194,6 +220,7 @@ const styles = StyleSheet.create({
     width: 300,
     alignSelf: "center",
     borderColor: "#3B7BFF",
-    borderWidth: 1
+    borderWidth: 1,
+    paddingLeft: 15
   }
 });
