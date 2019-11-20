@@ -1,6 +1,6 @@
 import { VictoryChart, VictoryLine, VictoryTheme } from 'victory-native';
 import React, { Component } from 'react';
-import { Text, View, Image, FlatList, StyleSheet } from 'react-native';
+import { Text, View, Button, Alert, StyleSheet } from 'react-native';
 import Header from '../Components/Header';
 import axios from 'axios';
 import Loading from '../Components/Loading';
@@ -13,7 +13,7 @@ export interface AnalysisProps {
 interface State {
   readings: object[];
   isLoading: boolean;
-  // date: string
+  date: Date;
 }
 
 export default class AnalysisScreen extends React.Component<
@@ -25,42 +25,15 @@ export default class AnalysisScreen extends React.Component<
 
     this.state = {
       readings: [],
-      isLoading: true
-      // date:
+      isLoading: true,
+      date: new Date()
     };
   }
-  componentDidMount() {
-    const { navigation } = this.props;
-    const sensor_id = JSON.stringify(navigation.getParam('sensor_id')).split(
-      '"'
-    )[1];
-    const query = JSON.stringify(navigation.getParam('query')).split('"')[1];
-    axios
-      .get(
-        `http://brejconies.pythonanywhere.com/reading/${sensor_id}?measurement=${query}&lower_limit=2019-11-20&upper_limit=2019-11-20`
-      )
-      .then(({ data }) => {
-        data = data.map(dataItem => {
-          const time = new Date(dataItem.timestamp);
-          dataItem.x = time;
-          // const formattedTime = time.getTime();
-          // dataItem.x = formattedTime;
-          delete dataItem.timestamp;
-          const measurement = dataItem[query];
-          dataItem.y = measurement;
-          delete dataItem[query];
-          return dataItem;
-        });
-        this.setState({ readings: data, isLoading: false });
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }
+
   render() {
     const { navigation } = this.props;
     const query = JSON.stringify(navigation.getParam('query')).split('"')[1];
-    const { readings } = this.state;
+    const { readings, date } = this.state;
     if (this.state.isLoading) return <Loading />;
     return (
       <>
@@ -76,15 +49,55 @@ export default class AnalysisScreen extends React.Component<
               interpolation="basis"
             />
           </VictoryChart>
-
-          <Text>{JSON.stringify(new Date())}</Text>
+          <View style={styles.container}>
+            <Button title="<" onPress={this.handleDateChange} />
+            <Text>{JSON.stringify(date).slice(1, 11)}</Text>
+            <Button title=">" onPress={this.handleDateChange} disabled={true} />
+          </View>
         </View>
       </>
     );
   }
+
+  handleDateChange = event => {
+    console.log(event);
+  };
+
+  componentDidMount() {
+    const { navigation } = this.props;
+    const sensor_id = JSON.stringify(navigation.getParam('sensor_id')).split(
+      '"'
+    )[1];
+    const query = JSON.stringify(navigation.getParam('query')).split('"')[1];
+    axios
+      .get(
+        `http://brejconies.pythonanywhere.com/reading/${sensor_id}?measurement=${query}&lower_limit=2019-11-20&upper_limit=2019-11-20`
+      )
+      .then(({ data }) => {
+        data = data.map(dataItem => {
+          const time = new Date(dataItem.timestamp);
+          dataItem.x = time;
+          delete dataItem.timestamp;
+          const measurement = dataItem[query];
+          dataItem.y = measurement;
+          delete dataItem[query];
+          return dataItem;
+        });
+        this.setState({ readings: data, isLoading: false });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
 }
 
 const styles = StyleSheet.create({
+  pagination_container: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
