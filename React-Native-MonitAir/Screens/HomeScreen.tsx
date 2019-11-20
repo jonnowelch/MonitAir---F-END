@@ -6,7 +6,6 @@ import Loading from "../Components/Loading";
 import axios from "axios";
 import { LinearGradient } from "expo-linear-gradient";
 import MainCircle from "../Components/MainCircle";
-import EasterEgg from "../Components/EasterEgg";
 import { TouchableHighlight } from "react-native-gesture-handler";
 
 export interface HomeProps {
@@ -18,7 +17,6 @@ interface State {
   reading: any;
   errMsg: any;
   loggedInUser: any;
-  easterEgg: boolean;
 }
 
 export default class HomeScreen extends React.Component<HomeProps, State> {
@@ -29,8 +27,7 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
       loggedInUser: [],
       isLoading: true,
       reading: {},
-      errMsg: null,
-      easterEgg: false
+      errMsg: null
     };
   }
   componentDidMount() {
@@ -46,7 +43,10 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
             return user;
           }
         });
-        this.setState({ loggedInUser: checkUsers, isLoading: false });
+        this.setState({
+          loggedInUser: checkUsers,
+          isLoading: false
+        });
       })
       .then(() => {
         const { loggedInUser } = this.state;
@@ -90,11 +90,14 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
     const { loggedInUser } = this.state;
     const sensor_id = loggedInUser[0] && loggedInUser[0].sensor_id;
     if (this.state.isLoading) return <Loading />;
-    if (this.state.easterEgg) return <EasterEgg />;
     return (
       <>
-        <Header navigate={this.props.navigation.navigate} />
-        <TouchableHighlight onPress={() => this.setState({ easterEgg: true })}>
+        <Header navigate={this.props.navigation} />
+        <TouchableHighlight
+          onPress={() => {
+            this.props.navigation.navigate("EasterEgg");
+          }}
+        >
           <Text style={{ color: "#13D0FF" }}>
             Hi {loggedInUser[0] && loggedInUser[0].username} welcome to your
             monitAir!

@@ -7,6 +7,7 @@ import LoginScreen from "./Screens/LoginScreen";
 import RegisterScreen from "./Screens/RegisterScreen";
 import Loading from "./Components/Loading";
 import HintsScreen from "./Screens/HintsScreen";
+import EasterEgg from "./Screens/EasterEgg";
 
 const MainNavigator = createStackNavigator(
   {
@@ -14,7 +15,8 @@ const MainNavigator = createStackNavigator(
     Analysis: { screen: AnalysisScreen, navigationOptions: { header: null } },
     Login: { screen: LoginScreen, navigationOptions: { header: null } },
     Register: { screen: RegisterScreen, navigationOptions: { header: null } },
-    Hints: { screen: HintsScreen, navigationOptions: { header: null } }
+    Hints: { screen: HintsScreen, navigationOptions: { header: null } },
+    EasterEgg: { screen: EasterEgg, navigationOptions: { header: null } }
   },
   { initialRouteName: "Login" }
 );

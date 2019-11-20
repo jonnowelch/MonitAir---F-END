@@ -1,7 +1,10 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
-interface Props {}
+interface Props {
+  navigation: any;
+}
 
 const EasterEgg: React.SFC<Props> = props => (
   <>
@@ -39,6 +42,29 @@ const EasterEgg: React.SFC<Props> = props => (
         Friendly reminder to please always ensure the co3 levels in your home
         are at a safe level!
       </Text>
+      <View
+        style={{
+          width: 200,
+          alignSelf: "center",
+          justifyContent: "center",
+          marginTop: 10
+        }}
+      >
+        <LinearGradient
+          colors={["#3B7BFF", "#13D0FF"]}
+          style={{ padding: 15, borderRadius: 10 }}
+        >
+          <TouchableOpacity
+            onPress={() => {
+              props.navigation.navigate("Home");
+            }}
+          >
+            <Text style={{ color: "white", alignSelf: "center" }}>
+              Back to Dashboard
+            </Text>
+          </TouchableOpacity>
+        </LinearGradient>
+      </View>
     </View>
   </>
 );
