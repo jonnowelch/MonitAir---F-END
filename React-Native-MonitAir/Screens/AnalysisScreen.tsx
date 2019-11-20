@@ -1,10 +1,9 @@
 import { VictoryChart, VictoryLine, VictoryTheme } from 'victory-native';
 import React, { Component } from 'react';
-import { Text, View, Button, Alert, StyleSheet } from 'react-native';
+import { Text, View, Button, StyleSheet } from 'react-native';
 import Header from '../Components/Header';
-import axios from 'axios';
+import * as api from '../api';
 import Loading from '../Components/Loading';
-import DatePicker from 'react-native-datepicker';
 
 export interface AnalysisProps {
   navigation: any;
@@ -14,6 +13,8 @@ interface State {
   readings: object[];
   isLoading: boolean;
   date: Date;
+  query: string;
+  sensor_id: string;
 }
 
 export default class AnalysisScreen extends React.Component<
@@ -26,7 +27,9 @@ export default class AnalysisScreen extends React.Component<
     this.state = {
       readings: [],
       isLoading: true,
-      date: new Date()
+      date: new Date(),
+      query: '',
+      sensor_id: ''
     };
   }
 
@@ -60,34 +63,47 @@ export default class AnalysisScreen extends React.Component<
   }
 
   handleDateChange = event => {
-    console.log(event);
+    this.setState(prevState => {
+      const newDate = new Date(prevState.date);
+      newDate.setDate(newDate.getDate() - 1);
+      return { date: newDate };
+    });
   };
 
   componentDidMount() {
     const { navigation } = this.props;
+    const { date } = this.state;
     const sensor_id = JSON.stringify(navigation.getParam('sensor_id')).split(
       '"'
     )[1];
     const query = JSON.stringify(navigation.getParam('query')).split('"')[1];
-    axios
-      .get(
-        `http://brejconies.pythonanywhere.com/reading/${sensor_id}?measurement=${query}&lower_limit=2019-11-20&upper_limit=2019-11-20`
-      )
-      .then(({ data }) => {
-        data = data.map(dataItem => {
-          const time = new Date(dataItem.timestamp);
-          dataItem.x = time;
-          delete dataItem.timestamp;
-          const measurement = dataItem[query];
-          dataItem.y = measurement;
-          delete dataItem[query];
-          return dataItem;
-        });
-        this.setState({ readings: data, isLoading: false });
+
+    api
+      .getReadings(sensor_id, query, JSON.stringify(date).slice(1, 11))
+      .then(data => {
+        this.setState({ readings: data, isLoading: false, query, sensor_id });
       })
       .catch(err => {
         console.log(err);
       });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (JSON.stringify(prevState.date) !== JSON.stringify(this.state.date)) {
+      this.setState({ isLoading: true });
+      const { query, date, sensor_id } = this.state;
+      api
+        .getReadings(sensor_id, query, JSON.stringify(date).slice(1, 11))
+        .then(data => {
+          this.setState({
+            readings: data,
+            isLoading: false
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
   }
 }
 
