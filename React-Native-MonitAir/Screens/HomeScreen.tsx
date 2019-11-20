@@ -1,12 +1,12 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
-import Header from "../Components/Header";
-import React from "react";
-import Circle from "../Components/Circle";
-import Loading from "../Components/Loading";
-import axios from "axios";
-import { LinearGradient } from "expo-linear-gradient";
-import MainCircle from "../Components/MainCircle";
-import { TouchableHighlight } from "react-native-gesture-handler";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import Header from '../Components/Header';
+import React from 'react';
+import Circle from '../Components/Circle';
+import Loading from '../Components/Loading';
+import axios from 'axios';
+import { LinearGradient } from 'expo-linear-gradient';
+import MainCircle from '../Components/MainCircle';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 
 export interface HomeProps {
   navigation: any;
@@ -32,10 +32,10 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
   }
   componentDidMount() {
     axios
-      .get("http://brejconies.pythonanywhere.com/user")
+      .get('http://brejconies.pythonanywhere.com/user')
       .then(r => {
         const { navigation } = this.props;
-        const email = JSON.stringify(navigation.getParam("email")).split(
+        const email = JSON.stringify(navigation.getParam('email')).split(
           '"'
         )[1];
         const checkUsers = r.data.filter(user => {
@@ -95,10 +95,16 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
         <Header navigate={this.props.navigation} />
         <TouchableHighlight
           onPress={() => {
-            this.props.navigation.navigate("EasterEgg");
+            this.props.navigation.navigate('EasterEgg');
           }}
         >
-          <Text style={{ color: "#3B7BFF", alignSelf: "center" }}>
+          <Text
+            style={{
+              color: '#3B7BFF',
+              alignSelf: 'center',
+              fontFamily: 'Quicksand-SemiBold'
+            }}
+          >
             Hi {loggedInUser[0] && loggedInUser[0].username} welcome to your
             monitAir!
             {/* <Image
@@ -132,21 +138,29 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
             sensor_id={sensor_id}
             query="humidity_mean"
           />
-          <Text style={{ color: "#3B7BFF", margin: 20, alignSelf: "center" }}>
+          <Text
+            style={{
+              color: '#3B7BFF',
+              margin: 20,
+              alignSelf: 'center',
+              fontFamily: 'Quicksand-SemiBold'
+            }}
+          >
             Click the button below for hints and tips on how to keep the air
             quality clean in your home!
           </Text>
           <LinearGradient
-            colors={["#3B7BFF", "#13D0FF"]}
+            colors={['#3B7BFF', '#13D0FF']}
             style={{ padding: 15, borderRadius: 10 }}
           >
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate("Hints")}
+              onPress={() => this.props.navigation.navigate('Hints')}
             >
               <Text
                 style={{
-                  color: "white",
-                  alignSelf: "center"
+                  color: 'white',
+                  alignSelf: 'center',
+                  fontFamily: 'Quicksand-SemiBold'
                 }}
               >
                 Hints & Tips
@@ -163,10 +177,10 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 20,
     flex: 1,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 });
