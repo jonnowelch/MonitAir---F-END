@@ -30,11 +30,7 @@ export default class MainCircle extends React.Component<Props, State> {
     }
   }
   render() {
-    const navigate = this.props.navigate;
-    const title = this.props.title;
-    const reading = this.props.reading;
-    const sensor_id = this.props.sensor_id;
-    const query = this.props.query;
+    const { navigate, title, reading, sensor_id, query } = this.props;
     return (
       <View style={styles.gridItem}>
         <View

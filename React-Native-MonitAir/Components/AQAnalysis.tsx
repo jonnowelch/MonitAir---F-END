@@ -17,11 +17,11 @@ const AQAnalysis = ({ readings }) => {
   );
 
   let rank: string;
-  if (averageAQI < 500) rank = "'Hazardous.'";
-  if (averageAQI < 300) rank = "'Very Unhealthy.'";
-  if (averageAQI < 200) rank = "'Unhealthy.'";
-  if (averageAQI < 150) rank = "'Unhealthy for sensitive groups.'";
-  if (averageAQI < 100) rank = "'Moderate.'";
+  if (averageAQI < 500) rank = "'Hazardous'.";
+  if (averageAQI < 300) rank = "'Very Unhealthy'.";
+  if (averageAQI < 200) rank = "'Unhealthy'.";
+  if (averageAQI < 150) rank = "'Unhealthy for sensitive groups'.";
+  if (averageAQI < 100) rank = "'Moderate'.";
   if (averageAQI < 50) rank = "'Good' - well done!";
 
   return (
@@ -49,27 +49,12 @@ const AQAnalysis = ({ readings }) => {
       </Text>
       <LinearGradient
         colors={['#3B7BFF', '#13D0FF']}
-        style={{
-          padding: 6,
-          borderRadius: 10,
-          height: 40,
-          width: 120,
-          alignSelf: 'center',
-          marginTop: 10
-        }}
+        style={styles.linearGradient}
       >
         <TouchableOpacity
           onPress={() => this.props.navigation.navigate('Hints')}
         >
-          <Text
-            style={{
-              color: 'white',
-              alignSelf: 'center',
-              fontFamily: 'Quicksand-SemiBold'
-            }}
-          >
-            Hints & Tips
-          </Text>
+          <Text style={styles.buttonText}>Hints & Tips</Text>
         </TouchableOpacity>
       </LinearGradient>
     </View>
@@ -80,6 +65,19 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'Quicksand-SemiBold',
     color: '#3B7BFF'
+  },
+  linearGradient: {
+    padding: 6,
+    borderRadius: 10,
+    height: 40,
+    width: 120,
+    alignSelf: 'center',
+    marginTop: 10
+  },
+  buttonText: {
+    color: 'white',
+    alignSelf: 'center',
+    fontFamily: 'Quicksand-SemiBold'
   }
 });
 

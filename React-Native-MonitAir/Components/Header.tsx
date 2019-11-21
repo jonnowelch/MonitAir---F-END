@@ -17,12 +17,7 @@ const Header: React.SFC<HeaderProps> = ({ navigate, unclickable }) => {
         >
           <Image
             source={require('../assets/transparent-logo.png')}
-            style={{
-              height: 100,
-              width: 250,
-              alignSelf: 'center',
-              marginTop: 10
-            }}
+            style={styles.img}
           ></Image>
         </TouchableHighlight>
       </View>
@@ -36,6 +31,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'yellow',
     padding: 30,
     textAlign: 'center'
+  },
+  img: {
+    height: 100,
+    width: 250,
+    alignSelf: 'center',
+    marginTop: 10
   }
 });
 

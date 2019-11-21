@@ -17,9 +17,8 @@ export default class Circle extends React.Component<CircleProps, State> {
   constructor(props: CircleProps) {
     super(props);
   }
-  componentDidUpdate(prevProps, prevState) {
-    const reading = this.props.reading;
-    const title = this.props.title;
+  componentDidUpdate(prevProps) {
+    const { title, reading } = this.props;
     if (this.props.reading !== prevProps.reading) {
       setBackgroundColour(reading, title);
     }
