@@ -9,13 +9,18 @@ import {
 
 export interface HeaderProps {
   navigate: (arg0: string) => {};
+  unclickable?: boolean;
 }
 
-const Header: React.SFC<HeaderProps> = ({ navigate }) => {
+const Header: React.SFC<HeaderProps> = ({ navigate, unclickable }) => {
   return (
     <>
       <View style={{ justifyContent: "center" }}>
-        <TouchableHighlight onPress={() => navigate("Home")}>
+        <TouchableHighlight
+          onPress={() => {
+            if (!unclickable) navigate("Home");
+          }}
+        >
           <Image
             source={require("../assets/transparent-logo.png")}
             style={{
