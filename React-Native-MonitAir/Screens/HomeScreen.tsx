@@ -143,14 +143,7 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
             sensor_id={sensor_id}
             query="humidity_mean"
           />
-          <Text
-            style={{
-              color: '#3B7BFF',
-              margin: 20,
-              alignSelf: 'center',
-              fontFamily: 'Quicksand-SemiBold'
-            }}
-          >
+          <Text style={styles.text}>
             Click the button below for hints and tips on how to keep the air
             quality clean in your home!
           </Text>
@@ -161,15 +154,7 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Hints')}
             >
-              <Text
-                style={{
-                  color: 'white',
-                  alignSelf: 'center',
-                  fontFamily: 'Quicksand-SemiBold'
-                }}
-              >
-                Hints & Tips
-              </Text>
+              <Text style={styles.buttonText}>Hints & Tips</Text>
             </TouchableOpacity>
           </LinearGradient>
         </View>
@@ -184,8 +169,18 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  text: {
+    color: '#3B7BFF',
+    margin: 10,
+    alignSelf: 'center',
+    fontFamily: 'Quicksand-SemiBold'
+  },
+  buttonText: {
+    color: 'white',
+    alignSelf: 'center',
+    fontFamily: 'Quicksand-SemiBold'
   }
 });

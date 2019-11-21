@@ -31,15 +31,7 @@ export default class Circle extends React.Component<CircleProps, State> {
         <View style={styles.gridItem}>
           <View
             style={{
-              width: 140,
-              height: 140,
-              borderRadius: 70,
-              borderColor: 'whitesmoke',
-              borderWidth: 3,
-              marginTop: 25,
-              marginBottom: 5,
-              justifyContent: 'center',
-              alignItems: 'center',
+              ...styles.circle,
               backgroundColor: setBackgroundColour(reading, title)
             }}
           >
@@ -95,5 +87,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 20,
     fontFamily: 'Quicksand-SemiBold'
+  },
+  circle: {
+    width: 130,
+    height: 130,
+    borderRadius: 65,
+    borderColor: 'whitesmoke',
+    borderWidth: 3,
+    marginTop: 25,
+    marginBottom: 5,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });

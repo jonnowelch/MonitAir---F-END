@@ -39,15 +39,7 @@ export default class MainCircle extends React.Component<Props, State> {
       <View style={styles.gridItem}>
         <View
           style={{
-            width: 180,
-            height: 180,
-            borderRadius: 90,
-            borderColor: 'whitesmoke',
-            borderWidth: 3,
-            marginTop: 25,
-            marginBottom: 5,
-            justifyContent: 'center',
-            alignItems: 'center',
+            ...styles.mainCircle,
             backgroundColor: setBackgroundColour(reading)
           }}
         >
@@ -92,5 +84,16 @@ const styles = StyleSheet.create({
     color: '#3B7BFF',
     fontSize: 18,
     fontFamily: 'Quicksand-SemiBold'
+  },
+  mainCircle: {
+    width: 160,
+    height: 160,
+    borderRadius: 80,
+    borderColor: 'whitesmoke',
+    borderWidth: 3,
+    marginTop: 25,
+    marginBottom: 5,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
