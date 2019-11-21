@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
 import Header from '../Components/Header';
 import React from 'react';
 import Circle from '../Components/Circle';
@@ -7,6 +7,7 @@ import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 import MainCircle from '../Components/MainCircle';
 import { TouchableHighlight } from 'react-native-gesture-handler';
+import * as api from '../api';
 
 export interface HomeProps {
   navigation: any;
@@ -74,11 +75,14 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
           )
           .then(r => {
             this.updateReadings();
+
             this.setState({ reading: r.data, isLoading: false });
           });
       })
-      .catch(error => {
-        console.log(error);
+      .catch(err => {
+        console.log('catch block');
+
+        this.setState({ errMsg: err.response.data.msg });
       });
   }
 
@@ -93,21 +97,31 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
           this.setState({ reading: r.data });
         })
         .catch(err => {
-          console.log(err);
+          console.log('catch block');
+
+          this.setState({ errMsg: err.response.data.msg });
         });
     }, 30000);
   }
   render() {
-    const { reading } = this.state;
-    const { loggedInUser } = this.state;
+    const { reading, loggedInUser, errMsg } = this.state;
     const sensor_id = loggedInUser[0] && loggedInUser[0].sensor_id;
+    const { navigate } = this.props.navigation;
+    if (errMsg) {
+      Alert.alert('Login failed', errMsg, [
+        {
+          text: 'Try again',
+          onPress: () => this.setState({ errMsg: '' })
+        }
+      ]);
+    }
     if (this.state.isLoading) return <Loading />;
     return (
       <>
-        <Header navigate={this.props.navigation} />
+        <Header navigate={this.props.navigation} unclickable={true} />
         <TouchableHighlight
           onPress={() => {
-            this.props.navigation.navigate('EasterEgg');
+            navigate('EasterEgg');
           }}
         >
           <Text
@@ -124,21 +138,21 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
         <View style={styles.container}>
           <MainCircle
             title="Air Quality Index"
-            navigate={this.props.navigation.navigate}
+            navigate={navigate}
             reading={reading.total_quality_mean}
             sensor_id={sensor_id}
             query="total_quality_mean"
           />
           <Circle
-            title="Temperature"
-            navigate={this.props.navigation.navigate}
+            title="Temperature - °C"
+            navigate={navigate}
             reading={reading.temp_mean}
             sensor_id={sensor_id}
             query="temp_mean"
           />
           <Circle
-            title="Humidity"
-            navigate={this.props.navigation.navigate}
+            title="Humidity - %"
+            navigate={navigate}
             reading={reading.humidity_mean}
             sensor_id={sensor_id}
             query="humidity_mean"

@@ -32,8 +32,26 @@ export default class LoginScreen extends Component<LoginProps, State> {
   componentDidMount() {
     this.setState({ isLoading: false });
   }
+  handleLogin = () => {
+    const { isLoading, email, password, username } = this.state;
+    if (isLoading) return <Loading />;
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
+        this.props.navigation.navigate("Home", {
+          email
+        });
+      })
+      .catch(error => {
+        // console.log(error.code, "<==error.code");
+        const errCode = String(error.code);
+        this.setState({ errCode });
+      });
+  };
   render() {
-    const { errCode } = this.state;
+    const { navigate } = this.props.navigation;
+    const { email, password, errCode } = this.state;
     if (errCode) {
       const userFacingErrMsg: string =
         errCode === "auth/user-not-found"
@@ -50,6 +68,7 @@ export default class LoginScreen extends Component<LoginProps, State> {
         }
       ]);
     }
+
     const handleLogin = () => {
       const { isLoading } = this.state;
       if (isLoading) return <Loading />;
@@ -67,12 +86,14 @@ export default class LoginScreen extends Component<LoginProps, State> {
           this.setState({ errCode });
         });
     };
+
     return (
       <>
         <View style={{ paddingTop: 20 }}>
-          <Header navigate={this.props.navigation.navigate} />
+          <Header navigate={navigate} unclickable={true} />
         </View>
         <View style={{ alignSelf: "center", flex: 1 }}>
+
           <Text style={styles.loginText}>
             Please login:
             <Image
@@ -92,7 +113,7 @@ export default class LoginScreen extends Component<LoginProps, State> {
             <TextInput
               style={styles.input}
               placeholder="Enter Email"
-              value={this.state.email}
+              value={email}
               onChangeText={email => this.setState({ email })}
             />
           </View>
@@ -100,7 +121,7 @@ export default class LoginScreen extends Component<LoginProps, State> {
             <TextInput
               style={styles.input}
               placeholder="Enter Password"
-              value={this.state.password}
+              value={password}
               secureTextEntry={true}
               onChangeText={password => this.setState({ password })}
             />
@@ -113,7 +134,7 @@ export default class LoginScreen extends Component<LoginProps, State> {
                 borderRadius: 10
               }}
             >
-              <TouchableOpacity onPress={handleLogin}>
+              <TouchableOpacity onPress={this.handleLogin}>
                 <Text
                   style={{
                     color: "white",
@@ -127,7 +148,9 @@ export default class LoginScreen extends Component<LoginProps, State> {
             </LinearGradient>
           </View>
           <View style={{ justifyContent: "center" }}>
+
             <Text style={styles.noAccountText}>
+
               Don't have an account? Hit the button below to get started!
             </Text>
           </View>
@@ -138,7 +161,9 @@ export default class LoginScreen extends Component<LoginProps, State> {
             >
               <TouchableOpacity
                 onPress={() => {
-                  this.props.navigation.navigate("Register");
+
+                  navigate("Register");
+
                 }}
               >
                 <Text

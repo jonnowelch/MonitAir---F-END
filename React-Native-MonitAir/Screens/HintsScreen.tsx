@@ -18,7 +18,7 @@ const HintsScreen: React.SFC<Props> = props => (
           padding: 20
         }}
       >
-        Tips to keep the air quality good in your home!
+        Tips to improve the air quality in your home!
       </Text>
     </View>
     <ScrollView>
@@ -28,8 +28,8 @@ const HintsScreen: React.SFC<Props> = props => (
           alignSelf: "center",
           padding: 10,
           margin: 10,
-          height: '100%',
-          borderColor: '#13D0FF',
+          height: "100%",
+          borderColor: "#13D0FF",
           borderWidth: 2,
           borderRadius: 8
         }}
