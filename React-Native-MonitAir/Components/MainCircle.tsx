@@ -42,7 +42,7 @@ export default class MainCircle extends React.Component<Props, State> {
             width: 180,
             height: 180,
             borderRadius: 90,
-            borderColor: '#3B7BFF',
+            borderColor: 'whitesmoke',
             borderWidth: 3,
             marginTop: 25,
             marginBottom: 5,
@@ -64,22 +64,14 @@ export default class MainCircle extends React.Component<Props, State> {
             {reading}
           </Text>
         </View>
-        <Text
-          style={{
-            color: '#13D0FF',
-            fontSize: 18,
-            fontFamily: 'Quicksand-SemiBold'
-          }}
-        >
-          {title}
-        </Text>
+        <Text style={styles.titleText}>{title}</Text>
       </View>
     );
   }
 }
 const setBackgroundColour = reading => {
   if (reading <= 50) return '#29BF12'; // KELLY GREEN
-  if (reading < 100) return '#C2E812'; // BITTER LEMON
+  if (reading < 100) return '#ABFF4F'; // GREEN-YELLOW
   if (reading <= 150) return '#FFB400'; // UCLA GOLD
   if (reading <= 200) return '#F6511D'; // ORIOLES ORANGE
   if (reading <= 500) return '#DD1C1A'; // MAXIMUM RED
@@ -94,6 +86,11 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 44,
     color: '#ffffe6',
+    fontFamily: 'Quicksand-SemiBold'
+  },
+  titleText: {
+    color: '#3B7BFF',
+    fontSize: 18,
     fontFamily: 'Quicksand-SemiBold'
   }
 });

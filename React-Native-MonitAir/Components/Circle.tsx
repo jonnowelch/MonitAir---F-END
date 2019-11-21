@@ -12,22 +12,17 @@ export interface CircleProps {
 interface State {
   isLoading: boolean;
 }
-// title,
-// reading,
-// navigate,
-// sensor_id,
-// query
 
 export default class Circle extends React.Component<CircleProps, State> {
   constructor(props: CircleProps) {
     super(props);
-    this.state = {
-      isLoading: true
-    };
+    // this.state = {
+    //   isLoading: true
+    // };
   }
-  componentDidMount() {
-    this.setState({ isLoading: false });
-  }
+  // componentDidMount() {
+  //   this.setState({ isLoading: false });
+  // }
   componentDidUpdate(prevProps, prevState) {
     const reading = this.props.reading;
     const title = this.props.title;
@@ -37,7 +32,7 @@ export default class Circle extends React.Component<CircleProps, State> {
   }
   render() {
     const { navigate, title, sensor_id, query, reading } = this.props;
-    if (this.state.isLoading) return <Text>...Loading</Text>;
+    // if (this.state.isLoading) return <Text>...Loading</Text>;
     return (
       <>
         <View style={styles.gridItem}>
@@ -46,7 +41,7 @@ export default class Circle extends React.Component<CircleProps, State> {
               width: 140,
               height: 140,
               borderRadius: 70,
-              borderColor: "#3B7BFF",
+              borderColor: 'whitesmoke',
               borderWidth: 3,
               marginTop: 25,
               marginBottom: 5,
@@ -68,16 +63,7 @@ export default class Circle extends React.Component<CircleProps, State> {
               {reading}
             </Text>
           </View>
-          <Text
-            style={{
-              color: '#13D0FF',
-              fontSize: 16,
-              marginBottom: 20,
-              fontFamily: 'Quicksand-SemiBold'
-            }}
-          >
-            {title}
-          </Text>
+          <Text style={styles.titleText}>{title}</Text>
         </View>
       </>
     );
@@ -106,8 +92,14 @@ const styles = StyleSheet.create({
     fontFamily: 'Quicksand-SemiBold'
   },
   gridItem: {
-    width: "50%",
-    justifyContent: "center",
-    alignItems: "center"
+    width: '50%',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  titleText: {
+    color: '#3B7BFF',
+    fontSize: 16,
+    marginBottom: 20,
+    fontFamily: 'Quicksand-SemiBold'
   }
 });

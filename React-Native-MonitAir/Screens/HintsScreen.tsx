@@ -28,9 +28,10 @@ const HintsScreen: React.SFC<Props> = props => (
           alignSelf: "center",
           padding: 10,
           margin: 10,
-          height: "100%",
-          borderColor: "#13D0FF",
-          borderWidth: 2
+          height: '100%',
+          borderColor: '#13D0FF',
+          borderWidth: 2,
+          borderRadius: 8
         }}
       >
         <Text style={styles.text}>

@@ -1,9 +1,19 @@
-import React, { Component } from "react";
-import { Alert, Text, View, Image, FlatList } from "react-native";
-import Header from "../Components/Header";
-import axios from "axios";
-import Loading from "../Components/Loading";
-import DatePicker from "react-native-datepicker";
+import { VictoryChart, VictoryLine, VictoryTheme } from 'victory-native';
+import React from 'react';
+import {
+  Alert,
+  Text,
+  View,
+  Button,
+  StyleSheet,
+  ScrollView
+} from 'react-native';
+import Header from '../Components/Header';
+import * as api from '../api';
+import Loading from '../Components/Loading';
+import AQAnalysis from '../Components/AQAnalysis';
+import HumidityAnalysis from '../Components/HumidityAnalysis';
+import TemperatureAnalysis from '../Components/TemperatureAnalysis';
 
 export interface AnalysisProps {
   navigation: any;
@@ -12,8 +22,9 @@ export interface AnalysisProps {
 interface State {
   readings: object[];
   isLoading: boolean;
-  dateFrom: Date;
-  dateTo: Date;
+  date: Date;
+  query: string;
+  sensor_id: string;
   errResponse: string;
 }
 
@@ -26,129 +37,199 @@ export default class AnalysisScreen extends React.Component<
 
     this.state = {
       readings: [],
-      isLoading: false,
-      dateFrom: null,
-      dateTo: null,
-      errResponse: ""
+      isLoading: true,
+      date: new Date(),
+      query: '',
+      sensor_id: '',
+      errResponse: ''
     };
   }
+
+  render() {
+    const { navigation } = this.props;
+    const { readings, date, isLoading, errResponse, query } = this.state;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (isLoading) return <Loading />;
+    if (errResponse)
+      Alert.alert('Error Occurred!', errResponse, [
+        {
+          text: 'OK',
+          onPress: () => this.setState({ errResponse: '', isLoading: false })
+        }
+      ]);
+
+    return (
+      <>
+        <Header navigate={navigation} />
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>
+            {query === 'total_quality_mean'
+              ? 'Air Quality Index'
+              : query === 'temp_mean'
+              ? 'Temperature - °C'
+              : 'Humidity - %'}
+          </Text>
+        </View>
+        <ScrollView style={styles.scroller}>
+          <View style={styles.mainContainer}>
+            <View style={styles.chartContainer}>
+              <VictoryChart theme={VictoryTheme.material}>
+                <VictoryLine
+                  style={{
+                    data: { stroke: '#3B7BFF' },
+                    parent: { border: '1px solid #ccc' }
+                  }}
+                  data={readings}
+                  interpolation="basis"
+                />
+              </VictoryChart>
+              <View style={styles.paginationContainer}>
+                <Button color="#3B7BFF" title="<" onPress={this.decreaseDate} />
+                <Text style={styles.paginationText}>
+                  {JSON.stringify(date).slice(1, 11)}
+                </Text>
+                <Button
+                  color="#3B7BFF"
+                  title=">"
+                  onPress={this.increaseDate}
+                  disabled={date >= today ? true : false}
+                />
+              </View>
+            </View>
+            <View style={styles.analysisContainer}>
+              {query === 'total_quality_mean' ? (
+                <AQAnalysis readings={readings} />
+              ) : null}
+              {query === 'humidity_mean' ? (
+                <HumidityAnalysis readings={readings} />
+              ) : null}
+              {query === 'temp_mean' ? (
+                <TemperatureAnalysis readings={readings} />
+              ) : null}
+            </View>
+          </View>
+        </ScrollView>
+      </>
+    );
+  }
+
+  decreaseDate = () => {
+    this.setState(prevState => {
+      const newDate = new Date(prevState.date);
+      newDate.setHours(0, 0, 0, 0);
+      newDate.setDate(newDate.getDate() - 1);
+      return { date: newDate };
+    });
+  };
+
+  increaseDate = () => {
+    this.setState(prevState => {
+      const newDate = new Date(prevState.date);
+      newDate.setHours(0, 0, 0, 0);
+      newDate.setDate(newDate.getDate() + 1);
+      return { date: newDate };
+    });
+  };
+
   componentDidMount() {
     const { navigation } = this.props;
-    const sensor_id = JSON.stringify(navigation.getParam("sensor_id")).split(
+    const { date } = this.state;
+    const sensor_id = JSON.stringify(navigation.getParam('sensor_id')).split(
       '"'
     )[1];
-    const query = JSON.stringify(navigation.getParam("query")).split('"')[1];
-    axios
-      .get(
-        `http://brejconies.pythonanywhere.com/reading/${sensor_id}?measurement=${query}&lower_limit=2119-11-18&upper_limit=2119-11-19`
-      )
-      .then(r => {
-        this.setState({ readings: r.data, isLoading: false });
+    const query = JSON.stringify(navigation.getParam('query')).split('"')[1];
+
+    api
+      .getReadings(sensor_id, query, JSON.stringify(date).slice(1, 11))
+      .then(data => {
+        this.setState(() => {
+          const date = new Date();
+          date.setHours(0, 0, 0, 0);
+          return { readings: data, isLoading: false, query, sensor_id, date };
+        });
       })
       .catch(err => {
-        console.log(err.response.data.msg);
         this.setState({
-          errResponse: err.response.data.msg
+          errResponse: err.response.data.msg,
+          isLoading: false
         });
       });
   }
 
   removeErr() {
-    this.setState({ errResponse: "" });
+    this.setState({ errResponse: '' });
   }
-  render() {
-    const { errResponse } = this.state;
-    const { navigation } = this.props;
-    const query = JSON.stringify(navigation.getParam("query")).split('"')[1];
-    const title = JSON.stringify(this.props.navigation.getParam("title")).split(
-      '"'
-    )[1];
-    const { readings } = this.state;
-    if (errResponse)
-      Alert.alert("Error Occurred!", errResponse, [
-        {
-          text: "OK",
-          onPress: () => this.setState({ errResponse: "", isLoading: false })
-        }
-      ]);
-    if (this.state.isLoading) return <Loading />;
-    return (
-      <>
-        <Header navigate={this.props.navigation.navigate} />
-        <View>
-          <Text style={{ fontFamily: "Quicksand-SemiBold" }}>
-            Analysis Screen for {title}
-          </Text>
-          <Image
-            style={{ width: 250, height: 250 }}
-            source={{
-              uri: "https://media.giphy.com/media/xT77XKxcPqxIZqUrwk/giphy.gif"
-            }}
-          />
-          <Text>Select date range to see analysis</Text>
-          <Text>Date from</Text>
-          <DatePicker
-            style={{ width: 200 }}
-            date={this.state.dateFrom}
-            mode="date"
-            placeholder="Select Date"
-            format="YYYY-MM-DD"
-            minDate="2018-01-01"
-            maxDate="2019-11-22"
-            confirmBtnText="Confirm"
-            cancelBtnText="Cancel"
-            customStyles={{
-              dateIcon: {
-                position: "absolute",
-                left: 0,
-                top: 4,
-                marginLeft: 0
-              },
-              dateInput: {
-                marginLeft: 36
-              }
-            }}
-            onDateChange={date => {
-              this.setState({ dateFrom: date });
-            }}
-          ></DatePicker>
-          <Text>Date To</Text>
-          <DatePicker
-            style={{ width: 200 }}
-            date={this.state.dateTo}
-            mode="date"
-            placeholder="Select Date"
-            format="YYYY-MM-DD"
-            minDate="2018-01-01"
-            maxDate="2019-11-22"
-            confirmBtnText="Confirm"
-            cancelBtnText="Cancel"
-            customStyles={{
-              dateIcon: {
-                position: "absolute",
-                left: 0,
-                top: 4,
-                marginLeft: 0
-              },
-              dateInput: {
-                marginLeft: 36
-              }
-            }}
-            onDateChange={date => {
-              this.setState({ dateTo: date });
-            }}
-          ></DatePicker>
-          <FlatList
-            data={readings}
-            renderItem={(item: any) => (
-              <View key={item.item.timestamp}>
-                <Text>{item.item[query]}</Text>
-              </View>
-            )}
-            keyExtractor={(item: any, index: number) => index.toString()}
-          />
-        </View>
-      </>
-    );
+
+  componentDidUpdate(prevProps, prevState) {
+    if (JSON.stringify(prevState.date) !== JSON.stringify(this.state.date)) {
+      this.setState({ isLoading: true });
+      const { query, date, sensor_id } = this.state;
+      api
+        .getReadings(sensor_id, query, JSON.stringify(date).slice(1, 11))
+        .then(data => {
+          this.setState({
+            readings: data,
+            isLoading: false
+          });
+        })
+        .catch(err => {
+          this.increaseDate();
+          this.setState({
+            errResponse: err.response.data.msg,
+            isLoading: false
+          });
+        });
+    }
   }
 }
+
+const styles = StyleSheet.create({
+  paginationContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  paginationText: {
+    fontFamily: 'Quicksand-SemiBold',
+    color: '#3B7BFF',
+    padding: 5
+  },
+  mainContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative'
+  },
+  title: {
+    alignSelf: 'center',
+    fontSize: 22,
+    fontFamily: 'Quicksand-SemiBold',
+    color: '#13D0FF'
+  },
+  titleContainer: {
+    position: 'absolute',
+    flex: 1,
+    width: '100%',
+    paddingTop: 60,
+    marginTop: 40,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  chartContainer: {
+    position: 'relative',
+    width: '100%'
+  },
+  analysisContainer: {
+    padding: 10,
+    margin: 10,
+    marginTop: 20,
+    borderColor: '#13D0FF',
+    borderWidth: 2,
+    borderRadius: 8
+  },
+  scroller: {
+    marginTop: 15
+  }
+});
