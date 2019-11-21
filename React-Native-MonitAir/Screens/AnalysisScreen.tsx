@@ -4,6 +4,7 @@ import { Text, View, Button, StyleSheet } from 'react-native';
 import Header from '../Components/Header';
 import * as api from '../api';
 import Loading from '../Components/Loading';
+import AQAnalysis from '../Components/AQAnalysis';
 
 export interface AnalysisProps {
   navigation: any;
@@ -37,7 +38,7 @@ export default class AnalysisScreen extends React.Component<
 
   render() {
     const { navigation } = this.props;
-    const { readings, date, isLoading, isErr } = this.state;
+    const { readings, date, isLoading, isErr, query } = this.state;
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     if (isLoading) return <Loading />;
@@ -66,6 +67,9 @@ export default class AnalysisScreen extends React.Component<
               disabled={date >= today ? true : false}
             />
           </View>
+          {query === 'total_quality_mean' ? (
+            <AQAnalysis readings={readings} />
+          ) : null}
         </View>
       </>
     );
