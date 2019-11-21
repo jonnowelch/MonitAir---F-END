@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { Text, View, Image, FlatList } from 'react-native';
-import Header from '../Components/Header';
-import axios from 'axios';
-import Loading from '../Components/Loading';
-import DatePicker from 'react-native-datepicker';
+import React, { Component } from "react";
+import { Alert, Text, View, Image, FlatList } from "react-native";
+import Header from "../Components/Header";
+import axios from "axios";
+import Loading from "../Components/Loading";
+import DatePicker from "react-native-datepicker";
 
 export interface AnalysisProps {
   navigation: any;
@@ -14,6 +14,7 @@ interface State {
   isLoading: boolean;
   dateFrom: Date;
   dateTo: Date;
+  errResponse: string;
 }
 
 export default class AnalysisScreen extends React.Component<
@@ -25,47 +26,63 @@ export default class AnalysisScreen extends React.Component<
 
     this.state = {
       readings: [],
-      isLoading: true,
+      isLoading: false,
       dateFrom: null,
-      dateTo: null
+      dateTo: null,
+      errResponse: ""
     };
   }
   componentDidMount() {
     const { navigation } = this.props;
-    const sensor_id = JSON.stringify(navigation.getParam('sensor_id')).split(
+    const sensor_id = JSON.stringify(navigation.getParam("sensor_id")).split(
       '"'
     )[1];
-    const query = JSON.stringify(navigation.getParam('query')).split('"')[1];
+    const query = JSON.stringify(navigation.getParam("query")).split('"')[1];
     axios
       .get(
-        `http://brejconies.pythonanywhere.com/reading/${sensor_id}?measurement=${query}&lower_limit=2019-11-18&upper_limit=2019-11-19`
+        `http://brejconies.pythonanywhere.com/reading/${sensor_id}?measurement=${query}&lower_limit=2119-11-18&upper_limit=2119-11-19`
       )
       .then(r => {
         this.setState({ readings: r.data, isLoading: false });
       })
       .catch(err => {
-        console.log(err);
+        console.log(err.response.data.msg);
+        this.setState({
+          errResponse: err.response.data.msg
+        });
       });
   }
+
+  removeErr() {
+    this.setState({ errResponse: "" });
+  }
   render() {
+    const { errResponse } = this.state;
     const { navigation } = this.props;
-    const query = JSON.stringify(navigation.getParam('query')).split('"')[1];
-    const title = JSON.stringify(this.props.navigation.getParam('title')).split(
+    const query = JSON.stringify(navigation.getParam("query")).split('"')[1];
+    const title = JSON.stringify(this.props.navigation.getParam("title")).split(
       '"'
     )[1];
     const { readings } = this.state;
+    if (errResponse)
+      Alert.alert("Error Occurred!", errResponse, [
+        {
+          text: "OK",
+          onPress: () => this.setState({ errResponse: "", isLoading: false })
+        }
+      ]);
     if (this.state.isLoading) return <Loading />;
     return (
       <>
         <Header navigate={this.props.navigation.navigate} />
         <View>
-          <Text style={{ fontFamily: 'Quicksand-SemiBold' }}>
+          <Text style={{ fontFamily: "Quicksand-SemiBold" }}>
             Analysis Screen for {title}
           </Text>
           <Image
             style={{ width: 250, height: 250 }}
             source={{
-              uri: 'https://media.giphy.com/media/xT77XKxcPqxIZqUrwk/giphy.gif'
+              uri: "https://media.giphy.com/media/xT77XKxcPqxIZqUrwk/giphy.gif"
             }}
           />
           <Text>Select date range to see analysis</Text>
@@ -82,7 +99,7 @@ export default class AnalysisScreen extends React.Component<
             cancelBtnText="Cancel"
             customStyles={{
               dateIcon: {
-                position: 'absolute',
+                position: "absolute",
                 left: 0,
                 top: 4,
                 marginLeft: 0
@@ -108,7 +125,7 @@ export default class AnalysisScreen extends React.Component<
             cancelBtnText="Cancel"
             customStyles={{
               dateIcon: {
-                position: 'absolute',
+                position: "absolute",
                 left: 0,
                 top: 4,
                 marginLeft: 0
