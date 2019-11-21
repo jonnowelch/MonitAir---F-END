@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export interface AnalysisProps {
   readings: object[];
@@ -25,35 +26,60 @@ const AQAnalysis = ({ readings }) => {
 
   return (
     <View>
-      <Text>
-        Some analysis on your AQI readings: Your average Air Quality Index for
-        the day was {averageAQI}, which is considered {rank}.
-      </Text>
-      <Text>
+      <Text style={styles.text}>
+        Some analysis on your AQI readings:
+        {'\n'}
+        {'\n'}
+        Your average Air Quality Index for the day was {averageAQI}, which is
+        considered {rank}.{'\n'}
+        {'\n'}
         Your highest reading for the day was {highestAQI.y}, which was at{' '}
         {JSON.stringify(highestAQI.x).slice(12, 17)}. Are you able to identify
         what was happening around that time that would have lead to this index
         being high?
-      </Text>
-      <Text>
+        {'\n'}
+        {'\n'}
         Your lowest (best) reading for the day was {lowestAQI.y}, which was at{' '}
         {JSON.stringify(lowestAQI.x).slice(12, 17)}. Can you determine why?
+        {'\n'}
+        {'\n'}
+        See our hints & tips page for more details and a guide on what you can
+        do to improve the air quality in your home.
       </Text>
-      <Text>
-        There's an explainer below. See our hints & tips page to see what you
-        can do to improve this.
-      </Text>
-      <Image
-        source={require('../assets/PM2017.png')}
+      <LinearGradient
+        colors={['#3B7BFF', '#13D0FF']}
         style={{
-          height: 100,
-          width: 250,
+          padding: 6,
+          borderRadius: 10,
+          height: 40,
+          width: 120,
           alignSelf: 'center',
           marginTop: 10
         }}
-      ></Image>
+      >
+        <TouchableOpacity
+          onPress={() => this.props.navigation.navigate('Hints')}
+        >
+          <Text
+            style={{
+              color: 'white',
+              alignSelf: 'center',
+              fontFamily: 'Quicksand-SemiBold'
+            }}
+          >
+            Hints & Tips
+          </Text>
+        </TouchableOpacity>
+      </LinearGradient>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  text: {
+    fontFamily: 'Quicksand-SemiBold',
+    color: '#3B7BFF'
+  }
+});
 
 export default AQAnalysis;

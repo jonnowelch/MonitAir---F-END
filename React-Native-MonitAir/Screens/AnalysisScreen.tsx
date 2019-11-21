@@ -1,6 +1,6 @@
 import { VictoryChart, VictoryLine, VictoryTheme } from 'victory-native';
 import React from 'react';
-import { Text, View, Button, StyleSheet } from 'react-native';
+import { Text, View, Button, StyleSheet, ScrollView } from 'react-native';
 import Header from '../Components/Header';
 import * as api from '../api';
 import Loading from '../Components/Loading';
@@ -49,43 +49,51 @@ export default class AnalysisScreen extends React.Component<
     return (
       <>
         <Header navigate={navigation} />
-        <Text>
-          {query === 'total_quality_mean'
-            ? 'Air Quality Index'
-            : query === 'temp_mean'
-            ? 'Temperature - °C'
-            : 'Humidity - %'}
-        </Text>
-        <View style={styles.container}>
-          <VictoryChart theme={VictoryTheme.material}>
-            <VictoryLine
-              style={{
-                data: { stroke: '#3B7BFF' },
-                parent: { border: '1px solid #ccc' }
-              }}
-              data={readings}
-              interpolation="basis"
-            />
-          </VictoryChart>
-          <View style={styles.container}>
-            <Button title="<" onPress={this.decreaseDate} />
-            <Text>{JSON.stringify(date).slice(1, 11)}</Text>
-            <Button
-              title=">"
-              onPress={this.increaseDate}
-              disabled={date >= today ? true : false}
-            />
-          </View>
-          {query === 'total_quality_mean' ? (
-            <AQAnalysis readings={readings} />
-          ) : null}
-          {query === 'humidity_mean' ? (
-            <HumidityAnalysis readings={readings} />
-          ) : null}
-          {query === 'temp_mean' ? (
-            <TemperatureAnalysis readings={readings} />
-          ) : null}
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>
+            {query === 'total_quality_mean'
+              ? 'Air Quality Index'
+              : query === 'temp_mean'
+              ? 'Temperature - °C'
+              : 'Humidity - %'}
+          </Text>
         </View>
+        <ScrollView style={styles.scroller}>
+          <View style={styles.mainContainer}>
+            <View style={styles.chartContainer}>
+              <VictoryChart theme={VictoryTheme.material}>
+                <VictoryLine
+                  style={{
+                    data: { stroke: '#3B7BFF' },
+                    parent: { border: '1px solid #ccc' }
+                  }}
+                  data={readings}
+                  interpolation="basis"
+                />
+              </VictoryChart>
+              <View style={styles.pagination_container}>
+                <Button title="<" onPress={this.decreaseDate} />
+                <Text>{JSON.stringify(date).slice(1, 11)}</Text>
+                <Button
+                  title=">"
+                  onPress={this.increaseDate}
+                  disabled={date >= today ? true : false}
+                />
+              </View>
+            </View>
+            <View style={styles.analysisContainer}>
+              {query === 'total_quality_mean' ? (
+                <AQAnalysis readings={readings} />
+              ) : null}
+              {query === 'humidity_mean' ? (
+                <HumidityAnalysis readings={readings} />
+              ) : null}
+              {query === 'temp_mean' ? (
+                <TemperatureAnalysis readings={readings} />
+              ) : null}
+            </View>
+          </View>
+        </ScrollView>
       </>
     );
   }
@@ -156,10 +164,40 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  container: {
+  mainContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5fcff'
+    position: 'relative'
+  },
+  title: {
+    alignSelf: 'center',
+    fontSize: 22,
+    fontFamily: 'Quicksand-SemiBold',
+    color: '#13D0FF'
+  },
+  titleContainer: {
+    position: 'absolute',
+    flex: 1,
+    width: '100%',
+    paddingTop: 60,
+    marginTop: 40,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  chartContainer: {
+    position: 'relative',
+    width: '100%'
+  },
+  analysisContainer: {
+    padding: 10,
+    margin: 10,
+    marginTop: 20,
+    borderColor: '#13D0FF',
+    borderWidth: 2,
+    borderRadius: 8
+  },
+  scroller: {
+    marginTop: 15
   }
 });
