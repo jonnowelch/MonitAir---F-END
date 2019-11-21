@@ -131,7 +131,7 @@ export default class AnalysisScreen extends React.Component<
       const newDate = new Date(prevState.date);
       newDate.setHours(0, 0, 0, 0);
       newDate.setDate(newDate.getDate() + change);
-      return { date: newDate };
+      return { date: newDate, noMoreReadings: false };
     });
   };
 
