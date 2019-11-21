@@ -10,7 +10,14 @@ const HintsScreen: React.SFC<Props> = props => (
   <>
     <Header navigate={props.navigation.navigate} />
     <View style={{ alignSelf: "center", paddingBottom: 10 }}>
-      <Text style={{ color: "#13D0FF", fontSize: 18, padding: 20 }}>
+      <Text
+        style={{
+          color: "#13D0FF",
+          fontSize: 18,
+          fontFamily: "Quicksand-SemiBold",
+          padding: 20
+        }}
+      >
         Tips to keep the air quality good in your home!
       </Text>
     </View>
@@ -40,7 +47,13 @@ const HintsScreen: React.SFC<Props> = props => (
           easy to follow tips will help ensure you keep the air quality in your
           home at a safe level.
         </Text>
-        <Text style={{ marginTop: 5, color: "#3B7BFF" }}>
+        <Text
+          style={{
+            marginTop: 5,
+            color: "#3B7BFF",
+            fontFamily: "Quicksand-SemiBold"
+          }}
+        >
           1. Keep It Clean! A clean house is a healthier house. Your cleaning
           efforts should focus on strategies to reduce the accumulation of pet
           dander, mould, and dust lurking in your home. Focus on the following:
@@ -91,7 +104,8 @@ const styles = StyleSheet.create({
     flex: 1
   },
   text: {
-    color: "#3B7BFF"
+    color: "#3B7BFF",
+    fontFamily: "Quicksand-SemiBold"
   }
 });
 

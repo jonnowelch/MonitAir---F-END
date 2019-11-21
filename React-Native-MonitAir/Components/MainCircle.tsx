@@ -64,8 +64,15 @@ export default class MainCircle extends React.Component<Props, State> {
             {reading}
           </Text>
         </View>
-        <Text style={{ color: '#13D0FF', fontSize: 18 }}>{title}</Text>
-
+        <Text
+          style={{
+            color: '#13D0FF',
+            fontSize: 18,
+            fontFamily: 'Quicksand-SemiBold'
+          }}
+        >
+          {title}
+        </Text>
       </View>
     );
   }
@@ -86,7 +93,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 44,
-    fontWeight: 'bold',
-    color: '#ffffe6'
+    color: '#ffffe6',
+    fontFamily: 'Quicksand-SemiBold'
   }
 });
