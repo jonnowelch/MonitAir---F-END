@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 export const getReadings = (sensor_id: string, query: string, date: string) => {
   return axios

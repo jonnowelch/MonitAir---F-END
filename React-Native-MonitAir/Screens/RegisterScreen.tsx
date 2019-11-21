@@ -127,9 +127,16 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
     };
     return (
       <>
-        <Header navigate={this.props.navigation.navigate} />
+        <Header navigate={this.props.navigation.navigate} unclickable={true} />
         <View>
-          <Text style={{ fontSize: 20, paddingBottom: 20, color: "#13D0FF" }}>
+          <Text
+            style={{
+              fontSize: 20,
+              paddingBottom: 20,
+              color: "#13D0FF",
+              alignSelf: "center"
+            }}
+          >
             Please enter your details:
           </Text>
           <View style={{ paddingBottom: 10 }}>
@@ -195,6 +202,40 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
               <TouchableOpacity onPress={() => handleSubmit()}>
                 <Text style={{ color: "white", alignSelf: "center" }}>
                   Submit
+                </Text>
+              </TouchableOpacity>
+            </LinearGradient>
+          </View>
+          <View style={{ justifyContent: "center" }}>
+            <Text
+              style={{
+                marginTop: 20,
+                paddingTop: 20,
+                marginLeft: 20,
+                marginRight: 20,
+                color: "#13D0FF",
+                alignSelf: "center",
+                fontFamily: "Quicksand-SemiBold"
+              }}
+            >
+              Already have an account? Click below to return to the login screen
+            </Text>
+          </View>
+          <View style={{ width: 200, marginTop: 20, alignSelf: "center" }}>
+            <LinearGradient
+              colors={["#3B7BFF", "#13D0FF"]}
+              style={{
+                padding: 15,
+                borderRadius: 10,
+                justifyContent: "center",
+                alignItems: "center"
+              }}
+            >
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate("Login")}
+              >
+                <Text style={{ color: "white", alignSelf: "center" }}>
+                  Return to Login
                 </Text>
               </TouchableOpacity>
             </LinearGradient>
