@@ -12,10 +12,20 @@ export interface HomeProps {
   navigation: any;
 }
 
+interface Reading {
+  humidity_mean: number;
+  pressure_mean: number;
+  reading_id: number;
+  sensor_id: string;
+  temp_mean: number;
+  timestamp: string;
+  total_quality_mean: number;
+}
+
 interface State {
   isLoading: boolean;
-  reading: any;
-  errMsg: any;
+  reading: Reading;
+  errMsg: string;
   loggedInUser: any;
 }
 
@@ -26,7 +36,15 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
     this.state = {
       loggedInUser: [],
       isLoading: true,
-      reading: {},
+      reading: {
+        humidity_mean: null,
+        pressure_mean: null,
+        reading_id: null,
+        sensor_id: "",
+        temp_mean: null,
+        timestamp: "",
+        total_quality_mean: null
+      },
       errMsg: null
     };
   }
@@ -107,13 +125,6 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
           >
             Hi {loggedInUser[0] && loggedInUser[0].username} welcome to your
             monitAir!
-            {/* <Image
-              style={{ height: 50, width: 50, alignSelf: "flex-end" }}
-              source={{
-                uri:
-                  "http://3.bp.blogspot.com/-VjBLo3zVT6E/Uh8WiPorbeI/AAAAAAAABm0/v5Q2cpGVsCA/s1600/cloudtest001.gif"
-              }}
-            ></Image> */}
           </Text>
         </TouchableHighlight>
         <View style={styles.container}>
