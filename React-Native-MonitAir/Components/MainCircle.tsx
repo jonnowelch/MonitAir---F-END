@@ -71,7 +71,7 @@ export default class MainCircle extends React.Component<Props, State> {
 }
 const setBackgroundColour = reading => {
   if (reading <= 50) return '#29BF12'; // KELLY GREEN
-  if (reading < 100) return '#ABFF4F'; // GREEN-YELLOW
+  if (reading < 100) return '#75BC10'; // APPLE-GREEN
   if (reading <= 150) return '#FFB400'; // UCLA GOLD
   if (reading <= 200) return '#F6511D'; // ORIOLES ORANGE
   if (reading <= 500) return '#DD1C1A'; // MAXIMUM RED
