@@ -46,7 +46,14 @@ export default class AnalysisScreen extends React.Component<
 
     return (
       <>
-        <Header navigate={this.props.navigation} />
+        <Header navigate={navigation} />
+        <Text>
+          {query === 'total_quality_mean'
+            ? 'Air Quality Index'
+            : query === 'temp_mean'
+            ? 'Temperature'
+            : 'Humidity'}
+        </Text>
         <View style={styles.container}>
           <VictoryChart theme={VictoryTheme.material}>
             <VictoryLine
