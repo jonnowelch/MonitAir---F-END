@@ -1,6 +1,13 @@
 import { VictoryChart, VictoryLine, VictoryTheme } from 'victory-native';
 import React from 'react';
-import { Text, View, Button, StyleSheet, ScrollView } from 'react-native';
+import {
+  Alert,
+  Text,
+  View,
+  Button,
+  StyleSheet,
+  ScrollView
+} from 'react-native';
 import Header from '../Components/Header';
 import * as api from '../api';
 import Loading from '../Components/Loading';
@@ -18,7 +25,7 @@ interface State {
   date: Date;
   query: string;
   sensor_id: string;
-  isErr: boolean;
+  errResponse: string;
 }
 
 export default class AnalysisScreen extends React.Component<
@@ -34,17 +41,23 @@ export default class AnalysisScreen extends React.Component<
       date: new Date(),
       query: '',
       sensor_id: '',
-      isErr: false
+      errResponse: ''
     };
   }
 
   render() {
     const { navigation } = this.props;
-    const { readings, date, isLoading, isErr, query } = this.state;
+    const { readings, date, isLoading, errResponse, query } = this.state;
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     if (isLoading) return <Loading />;
-    if (isErr) return <Text>No more data to display</Text>;
+    if (errResponse)
+      Alert.alert('Error Occurred!', errResponse, [
+        {
+          text: 'OK',
+          onPress: () => this.setState({ errResponse: '', isLoading: false })
+        }
+      ]);
 
     return (
       <>
@@ -137,8 +150,15 @@ export default class AnalysisScreen extends React.Component<
         });
       })
       .catch(err => {
-        this.setState({ isLoading: false, isErr: true });
+        this.setState({
+          errResponse: err.response.data.msg,
+          isLoading: false
+        });
       });
+  }
+
+  removeErr() {
+    this.setState({ errResponse: '' });
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -154,7 +174,11 @@ export default class AnalysisScreen extends React.Component<
           });
         })
         .catch(err => {
-          this.setState({ isLoading: false, isErr: true });
+          this.increaseDate();
+          this.setState({
+            errResponse: err.response.data.msg,
+            isLoading: false
+          });
         });
     }
   }
