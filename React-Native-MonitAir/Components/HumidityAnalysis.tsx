@@ -22,7 +22,7 @@ const HumidityAnalysis = ({ readings }) => {
     <View>
       <Text>
         The average Humidity in your home for this day was {averageHumidity},
-        which is considered {rank}.
+        which is considered {rank}. Ideal home humidity is between 30% and 50% .
       </Text>
       {rank === 'too high' ? (
         <>

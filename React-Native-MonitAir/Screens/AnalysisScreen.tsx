@@ -1,11 +1,12 @@
 import { VictoryChart, VictoryLine, VictoryTheme } from 'victory-native';
-import React, { Component } from 'react';
+import React from 'react';
 import { Text, View, Button, StyleSheet } from 'react-native';
 import Header from '../Components/Header';
 import * as api from '../api';
 import Loading from '../Components/Loading';
 import AQAnalysis from '../Components/AQAnalysis';
 import HumidityAnalysis from '../Components/HumidityAnalysis';
+import TemperatureAnalysis from '../Components/TemperatureAnalysis';
 
 export interface AnalysisProps {
   navigation: any;
@@ -52,8 +53,8 @@ export default class AnalysisScreen extends React.Component<
           {query === 'total_quality_mean'
             ? 'Air Quality Index'
             : query === 'temp_mean'
-            ? 'Temperature'
-            : 'Humidity'}
+            ? 'Temperature - °C'
+            : 'Humidity - %'}
         </Text>
         <View style={styles.container}>
           <VictoryChart theme={VictoryTheme.material}>
@@ -80,6 +81,9 @@ export default class AnalysisScreen extends React.Component<
           ) : null}
           {query === 'humidity_mean' ? (
             <HumidityAnalysis readings={readings} />
+          ) : null}
+          {query === 'temp_mean' ? (
+            <TemperatureAnalysis readings={readings} />
           ) : null}
         </View>
       </>
