@@ -1,11 +1,5 @@
-import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableHighlight
-} from "react-native";
+import React from 'react';
+import { View, StyleSheet, Image, TouchableHighlight } from 'react-native';
 
 export interface HeaderProps {
   navigate: (arg0: string) => {};
@@ -15,18 +9,18 @@ export interface HeaderProps {
 const Header: React.SFC<HeaderProps> = ({ navigate, unclickable }) => {
   return (
     <>
-      <View style={{ justifyContent: "center" }}>
+      <View style={{ justifyContent: 'center' }}>
         <TouchableHighlight
           onPress={() => {
-            if (!unclickable) navigate("Home");
+            if (!unclickable) navigate('Home');
           }}
         >
           <Image
-            source={require("../assets/transparent-logo.png")}
+            source={require('../assets/transparent-logo.png')}
             style={{
               height: 100,
               width: 250,
-              alignSelf: "center",
+              alignSelf: 'center',
               marginTop: 10
             }}
           ></Image>
@@ -39,9 +33,9 @@ const Header: React.SFC<HeaderProps> = ({ navigate, unclickable }) => {
 const styles = StyleSheet.create({
   header: {
     fontSize: 40,
-    backgroundColor: "yellow",
+    backgroundColor: 'yellow',
     padding: 30,
-    textAlign: "center"
+    textAlign: 'center'
   }
 });
 

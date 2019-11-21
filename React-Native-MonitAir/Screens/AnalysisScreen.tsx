@@ -64,7 +64,7 @@ export default class AnalysisScreen extends React.Component<
 
     return (
       <>
-        <Header navigate={navigation} />
+        <Header navigate={navigation.navigate} />
         <View style={styles.titleContainer}>
           <Text style={styles.title}>
             {query === 'total_quality_mean'

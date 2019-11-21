@@ -144,14 +144,14 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
             query="total_quality_mean"
           />
           <Circle
-            title="Temperature - °C"
+            title="Temperature"
             navigate={navigate}
             reading={reading.temp_mean}
             sensor_id={sensor_id}
             query="temp_mean"
           />
           <Circle
-            title="Humidity - %"
+            title="Humidity"
             navigate={navigate}
             reading={reading.humidity_mean}
             sensor_id={sensor_id}
