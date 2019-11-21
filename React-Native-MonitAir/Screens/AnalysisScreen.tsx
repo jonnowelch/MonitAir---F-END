@@ -19,6 +19,7 @@ export interface AnalysisProps {
   navigation: any;
   title: string;
 }
+
 interface State {
   readings: object[];
   isLoading: boolean;
@@ -26,6 +27,7 @@ interface State {
   query: string;
   sensor_id: string;
   errResponse: string;
+  noMoreReadings: boolean;
 }
 
 export default class AnalysisScreen extends React.Component<
@@ -41,7 +43,8 @@ export default class AnalysisScreen extends React.Component<
       date: new Date(),
       query: '',
       sensor_id: '',
-      errResponse: ''
+      errResponse: '',
+      noMoreReadings: false
     };
   }
 
@@ -52,7 +55,7 @@ export default class AnalysisScreen extends React.Component<
     today.setHours(0, 0, 0, 0);
     if (isLoading) return <Loading />;
     if (errResponse)
-      Alert.alert('Error Occurred!', errResponse, [
+      Alert.alert('Error', errResponse, [
         {
           text: 'OK',
           onPress: () => this.setState({ errResponse: '', isLoading: false })
@@ -85,7 +88,12 @@ export default class AnalysisScreen extends React.Component<
                 />
               </VictoryChart>
               <View style={styles.paginationContainer}>
-                <Button color="#3B7BFF" title="<" onPress={this.decreaseDate} />
+                <Button
+                  color="#3B7BFF"
+                  title="<"
+                  onPress={this.decreaseDate}
+                  disabled={this.state.noMoreReadings ? true : false}
+                />
                 <Text style={styles.paginationText}>
                   {JSON.stringify(date).slice(1, 11)}
                 </Text>
@@ -128,7 +136,7 @@ export default class AnalysisScreen extends React.Component<
       const newDate = new Date(prevState.date);
       newDate.setHours(0, 0, 0, 0);
       newDate.setDate(newDate.getDate() + 1);
-      return { date: newDate };
+      return { date: newDate, noMoreReadings: false };
     });
   };
 
@@ -152,7 +160,8 @@ export default class AnalysisScreen extends React.Component<
       .catch(err => {
         this.setState({
           errResponse: err.response.data.msg,
-          isLoading: false
+          isLoading: false,
+          noMoreReadings: true
         });
       });
   }
@@ -162,7 +171,10 @@ export default class AnalysisScreen extends React.Component<
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (JSON.stringify(prevState.date) !== JSON.stringify(this.state.date)) {
+    if (
+      JSON.stringify(prevState.date) !== JSON.stringify(this.state.date) &&
+      !this.state.noMoreReadings
+    ) {
       this.setState({ isLoading: true });
       const { query, date, sensor_id } = this.state;
       api
@@ -174,10 +186,16 @@ export default class AnalysisScreen extends React.Component<
           });
         })
         .catch(err => {
-          this.increaseDate();
-          this.setState({
-            errResponse: err.response.data.msg,
-            isLoading: false
+          this.setState(prevState => {
+            const newDate = new Date(prevState.date);
+            newDate.setHours(0, 0, 0, 0);
+            newDate.setDate(newDate.getDate() + 1);
+            return {
+              date: newDate,
+              errResponse: err.response.data.msg,
+              isLoading: false,
+              noMoreReadings: true
+            };
           });
         });
     }
