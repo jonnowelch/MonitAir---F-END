@@ -71,10 +71,13 @@ export default class AnalysisScreen extends React.Component<
                   interpolation="basis"
                 />
               </VictoryChart>
-              <View style={styles.pagination_container}>
-                <Button title="<" onPress={this.decreaseDate} />
-                <Text>{JSON.stringify(date).slice(1, 11)}</Text>
+              <View style={styles.paginationContainer}>
+                <Button color="#3B7BFF" title="<" onPress={this.decreaseDate} />
+                <Text style={styles.paginationText}>
+                  {JSON.stringify(date).slice(1, 11)}
+                </Text>
                 <Button
+                  color="#3B7BFF"
                   title=">"
                   onPress={this.increaseDate}
                   disabled={date >= today ? true : false}
@@ -158,11 +161,16 @@ export default class AnalysisScreen extends React.Component<
 }
 
 const styles = StyleSheet.create({
-  pagination_container: {
+  paginationContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  paginationText: {
+    fontFamily: 'Quicksand-SemiBold',
+    color: '#3B7BFF',
+    padding: 5
   },
   mainContainer: {
     flex: 1,
