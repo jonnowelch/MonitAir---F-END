@@ -1,11 +1,11 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React from "react";
+import { View, Text, StyleSheet } from "react-native";
 
 export interface CircleProps {
   title: string;
   reading: number;
   navigate: any;
-  sensor_id: any;
+  sensor_id: string;
   query: string;
 }
 
@@ -49,19 +49,19 @@ export default class Circle extends React.Component<CircleProps, State> {
               width: 140,
               height: 140,
               borderRadius: 70,
-              borderColor: '#3B7BFF',
+              borderColor: "#3B7BFF",
               borderWidth: 3,
               marginTop: 25,
               marginBottom: 5,
-              justifyContent: 'center',
-              alignItems: 'center',
+              justifyContent: "center",
+              alignItems: "center",
               backgroundColor: setBackgroundColour(reading, title)
             }}
           >
             <Text
               style={styles.text}
               onPress={() => {
-                navigate('Analysis', {
+                navigate("Analysis", {
                   title,
                   sensor_id,
                   query
@@ -80,30 +80,30 @@ export default class Circle extends React.Component<CircleProps, State> {
   }
 }
 const setBackgroundColour = (reading, title) => {
-  if (title === 'Temperature - °C') {
-    if (reading <= 12) return '#00A6ED'; // VIVID CERULEAN
-    if (reading <= 18) return '#88CCF1'; // BABY BLUE
-    if (reading <= 24) return '#29BF12'; // KELLY GREEN
-    if (reading <= 30) return '#FFB400'; // UCLA GOLD
-    if (reading > 30) return '#DD1C1A'; // MAXIMUM RED
+  if (title === "Temperature - °C") {
+    if (reading <= 12) return "#00A6ED"; // VIVID CERULEAN
+    if (reading <= 18) return "#88CCF1"; // BABY BLUE
+    if (reading <= 24) return "#29BF12"; // KELLY GREEN
+    if (reading <= 30) return "#FFB400"; // UCLA GOLD
+    if (reading > 30) return "#DD1C1A"; // MAXIMUM RED
   } else {
-    if (reading < 20) return '#00A6ED'; // VIVID CERULEAN
-    if (reading < 40) return '#88CCF1'; // BABY BLUE
-    if (reading < 60) return '#29BF12'; // KELLY GREEN
-    if (reading < 80) return '#FFB400'; // UCLA GOLD
-    if (reading > 80) return '#DD1C1A'; // MAXIMUM RED
+    if (reading < 20) return "#00A6ED"; // VIVID CERULEAN
+    if (reading < 40) return "#88CCF1"; // BABY BLUE
+    if (reading < 60) return "#29BF12"; // KELLY GREEN
+    if (reading < 80) return "#FFB400"; // UCLA GOLD
+    if (reading > 80) return "#DD1C1A"; // MAXIMUM RED
   }
 };
 
 const styles = StyleSheet.create({
   text: {
     fontSize: 30,
-    fontWeight: 'bold',
-    color: '#ffffe6'
+    fontWeight: "bold",
+    color: "#ffffe6"
   },
   gridItem: {
-    width: '50%',
-    justifyContent: 'center',
-    alignItems: 'center'
+    width: "50%",
+    justifyContent: "center",
+    alignItems: "center"
   }
 });
