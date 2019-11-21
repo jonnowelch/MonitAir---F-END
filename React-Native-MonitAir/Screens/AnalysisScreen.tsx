@@ -5,6 +5,7 @@ import Header from '../Components/Header';
 import * as api from '../api';
 import Loading from '../Components/Loading';
 import AQAnalysis from '../Components/AQAnalysis';
+import HumidityAnalysis from '../Components/HumidityAnalysis';
 
 export interface AnalysisProps {
   navigation: any;
@@ -76,6 +77,9 @@ export default class AnalysisScreen extends React.Component<
           </View>
           {query === 'total_quality_mean' ? (
             <AQAnalysis readings={readings} />
+          ) : null}
+          {query === 'humidity_mean' ? (
+            <HumidityAnalysis readings={readings} />
           ) : null}
         </View>
       </>
