@@ -16,13 +16,7 @@ interface State {
 export default class Circle extends React.Component<CircleProps, State> {
   constructor(props: CircleProps) {
     super(props);
-    // this.state = {
-    //   isLoading: true
-    // };
   }
-  // componentDidMount() {
-  //   this.setState({ isLoading: false });
-  // }
   componentDidUpdate(prevProps, prevState) {
     const reading = this.props.reading;
     const title = this.props.title;
@@ -32,7 +26,6 @@ export default class Circle extends React.Component<CircleProps, State> {
   }
   render() {
     const { navigate, title, sensor_id, query, reading } = this.props;
-    // if (this.state.isLoading) return <Text>...Loading</Text>;
     return (
       <>
         <View style={styles.gridItem}>
@@ -41,7 +34,7 @@ export default class Circle extends React.Component<CircleProps, State> {
               width: 140,
               height: 140,
               borderRadius: 70,
-              borderColor: 'whitesmoke',
+              borderColor: "whitesmoke",
               borderWidth: 3,
               marginTop: 25,
               marginBottom: 5,
@@ -88,18 +81,18 @@ const setBackgroundColour = (reading, title) => {
 const styles = StyleSheet.create({
   text: {
     fontSize: 30,
-    color: '#ffffe6',
-    fontFamily: 'Quicksand-SemiBold'
+    color: "#ffffe6",
+    fontFamily: "Quicksand-SemiBold"
   },
   gridItem: {
-    width: '50%',
-    justifyContent: 'center',
-    alignItems: 'center'
+    width: "50%",
+    justifyContent: "center",
+    alignItems: "center"
   },
   titleText: {
-    color: '#3B7BFF',
+    color: "#3B7BFF",
     fontSize: 16,
     marginBottom: 20,
-    fontFamily: 'Quicksand-SemiBold'
+    fontFamily: "Quicksand-SemiBold"
   }
 });
