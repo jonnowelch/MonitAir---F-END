@@ -15,6 +15,7 @@ interface State {
   date: Date;
   query: string;
   sensor_id: string;
+  isErr: boolean;
 }
 
 export default class AnalysisScreen extends React.Component<
@@ -29,15 +30,19 @@ export default class AnalysisScreen extends React.Component<
       isLoading: true,
       date: new Date(),
       query: '',
-      sensor_id: ''
+      sensor_id: '',
+      isErr: false
     };
   }
 
   render() {
     const { navigation } = this.props;
-    const query = JSON.stringify(navigation.getParam('query')).split('"')[1];
-    const { readings, date } = this.state;
-    if (this.state.isLoading) return <Loading />;
+    const { readings, date, isLoading, isErr } = this.state;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (isLoading) return <Loading />;
+    if (isErr) return <Text>No more data to display</Text>;
+
     return (
       <>
         <Header navigate={this.props.navigation} />
@@ -53,12 +58,12 @@ export default class AnalysisScreen extends React.Component<
             />
           </VictoryChart>
           <View style={styles.container}>
-            <Button title="<" onPress={this.handleDateChange} />
+            <Button title="<" onPress={this.decreaseDate} />
             <Text>{JSON.stringify(date).slice(1, 11)}</Text>
             <Button
               title=">"
-              onPress={this.handleDateChange}
-              disabled={date >= new Date() ? true : false}
+              onPress={this.increaseDate}
+              disabled={date >= today ? true : false}
             />
           </View>
         </View>
@@ -66,11 +71,20 @@ export default class AnalysisScreen extends React.Component<
     );
   }
 
-  handleDateChange = event => {
-    console.log(event);
+  decreaseDate = () => {
     this.setState(prevState => {
       const newDate = new Date(prevState.date);
+      newDate.setHours(0, 0, 0, 0);
       newDate.setDate(newDate.getDate() - 1);
+      return { date: newDate };
+    });
+  };
+
+  increaseDate = () => {
+    this.setState(prevState => {
+      const newDate = new Date(prevState.date);
+      newDate.setHours(0, 0, 0, 0);
+      newDate.setDate(newDate.getDate() + 1);
       return { date: newDate };
     });
   };
@@ -86,10 +100,14 @@ export default class AnalysisScreen extends React.Component<
     api
       .getReadings(sensor_id, query, JSON.stringify(date).slice(1, 11))
       .then(data => {
-        this.setState({ readings: data, isLoading: false, query, sensor_id });
+        this.setState(() => {
+          const date = new Date();
+          date.setHours(0, 0, 0, 0);
+          return { readings: data, isLoading: false, query, sensor_id, date };
+        });
       })
       .catch(err => {
-        console.log(err);
+        this.setState({ isLoading: false, isErr: true });
       });
   }
 
@@ -106,7 +124,7 @@ export default class AnalysisScreen extends React.Component<
           });
         })
         .catch(err => {
-          console.log(err);
+          this.setState({ isLoading: false, isErr: true });
         });
     }
   }
