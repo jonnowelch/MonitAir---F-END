@@ -10,7 +10,7 @@ const HintsScreen: React.SFC<Props> = props => (
   <>
     <Header navigate={props.navigation.navigate} />
     <View style={{ alignSelf: "center", paddingBottom: 10 }}>
-      <Text style={{ color: "#13D0FF", fontSize: 18 }}>
+      <Text style={{ color: "#13D0FF", fontSize: 18, padding: 20 }}>
         Tips to keep the air quality good in your home!
       </Text>
     </View>
