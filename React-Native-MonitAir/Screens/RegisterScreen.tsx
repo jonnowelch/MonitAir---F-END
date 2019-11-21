@@ -117,7 +117,7 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
         })
         .then(() => {
           this.props.navigation.navigate("Login");
-          Alert.alert("Successfully Registered! Woop Woop!");
+          Alert.alert("Successfully Registered! Please login.");
         })
         .catch((error: any) => {
           console.log(error.code);
