@@ -36,11 +36,8 @@ export default class Circle extends React.Component<CircleProps, State> {
     }
   }
   render() {
-    const navigate = this.props.navigate;
-    const title = this.props.title;
-    const sensor_id = this.props.sensor_id;
-    const query = this.props.query;
-    const reading = this.props.reading;
+    const { navigate, title, sensor_id, query, reading } = this.props;
+    if (this.state.isLoading) return <Text>...Loading</Text>;
     return (
       <>
         <View style={styles.gridItem}>
@@ -71,7 +68,14 @@ export default class Circle extends React.Component<CircleProps, State> {
               {reading}
             </Text>
           </View>
-          <Text style={{ color: "#13D0FF", fontSize: 16, marginBottom: 20 }}>
+          <Text
+            style={{
+              color: '#13D0FF',
+              fontSize: 16,
+              marginBottom: 20,
+              fontFamily: 'Quicksand-SemiBold'
+            }}
+          >
             {title}
           </Text>
         </View>
@@ -98,8 +102,8 @@ const setBackgroundColour = (reading, title) => {
 const styles = StyleSheet.create({
   text: {
     fontSize: 30,
-    fontWeight: "bold",
-    color: "#ffffe6"
+    color: '#ffffe6',
+    fontFamily: 'Quicksand-SemiBold'
   },
   gridItem: {
     width: "50%",
