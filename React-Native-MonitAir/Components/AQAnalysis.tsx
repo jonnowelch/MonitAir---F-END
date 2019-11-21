@@ -17,11 +17,11 @@ const AQAnalysis = ({ readings }) => {
   );
 
   let rank: string;
-  if (averageAQI < 500) rank = "'Hazardous'";
-  if (averageAQI < 300) rank = "'Very Unhealthy'";
-  if (averageAQI < 200) rank = "'Unhealthy'";
-  if (averageAQI < 150) rank = "'Unhealthy for sensitive groups'";
-  if (averageAQI < 100) rank = "'Moderate'";
+  if (averageAQI < 500) rank = "'Hazardous.'";
+  if (averageAQI < 300) rank = "'Very Unhealthy.'";
+  if (averageAQI < 200) rank = "'Unhealthy.'";
+  if (averageAQI < 150) rank = "'Unhealthy for sensitive groups.'";
+  if (averageAQI < 100) rank = "'Moderate.'";
   if (averageAQI < 50) rank = "'Good' - well done!";
 
   return (
@@ -31,7 +31,8 @@ const AQAnalysis = ({ readings }) => {
         {'\n'}
         {'\n'}
         Your average Air Quality Index for the day was {averageAQI}, which is
-        considered {rank}.{'\n'}
+        considered {rank}
+        {'\n'}
         {'\n'}
         Your highest reading for the day was {highestAQI.y}, which was at{' '}
         {JSON.stringify(highestAQI.x).slice(12, 17)}. Are you able to identify
