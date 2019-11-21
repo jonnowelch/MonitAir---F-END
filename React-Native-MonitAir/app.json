@@ -4,7 +4,7 @@
     "slug": "React-Native-MonitAir",
     "privacy": "public",
     "sdkVersion": "35.0.0",
-    "platforms": ["ios", "android", "web"],
+    "platforms": ["android", "web"],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/monitAir-app-icon.png",
@@ -17,8 +17,8 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": ["**/*"],
-    "ios": {
-      "supportsTablet": true
+    "android": {
+      "package": "com.brejconies.monitair"
     }
   }
 }
