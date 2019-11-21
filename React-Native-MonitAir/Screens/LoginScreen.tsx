@@ -68,21 +68,33 @@ export default class LoginScreen extends Component<LoginProps, State> {
         }
       ]);
     }
+
+    const handleLogin = () => {
+      const { isLoading } = this.state;
+      if (isLoading) return <Loading />;
+      const { email, password, username } = this.state;
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(() => {
+          this.props.navigation.navigate("Home", {
+            email: this.state.email
+          });
+        })
+        .catch(error => {
+          const errCode = String(error.code);
+          this.setState({ errCode });
+        });
+    };
+
     return (
       <>
         <View style={{ paddingTop: 20 }}>
           <Header navigate={navigate} unclickable={true} />
         </View>
         <View style={{ alignSelf: "center", flex: 1 }}>
-          <Text
-            style={{
-              fontSize: 20,
-              paddingTop: 20,
-              color: "#13D0FF",
-              marginLeft: 10,
-              fontFamily: "Quicksand-SemiBold"
-            }}
-          >
+
+          <Text style={styles.loginText}>
             Please login:
             <Image
               source={{
@@ -136,17 +148,9 @@ export default class LoginScreen extends Component<LoginProps, State> {
             </LinearGradient>
           </View>
           <View style={{ justifyContent: "center" }}>
-            <Text
-              style={{
-                marginTop: 20,
-                paddingTop: 20,
-                marginLeft: 20,
-                marginRight: 20,
-                color: "#13D0FF",
-                alignSelf: "center",
-                fontFamily: "Quicksand-SemiBold"
-              }}
-            >
+
+            <Text style={styles.noAccountText}>
+
               Don't have an account? Hit the button below to get started!
             </Text>
           </View>
@@ -157,7 +161,9 @@ export default class LoginScreen extends Component<LoginProps, State> {
             >
               <TouchableOpacity
                 onPress={() => {
+
                   navigate("Register");
+
                 }}
               >
                 <Text
@@ -194,5 +200,21 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     justifyContent: "center",
     marginTop: 20
+  },
+  loginText: {
+    fontSize: 20,
+    paddingTop: 20,
+    color: "#13D0FF",
+    marginLeft: 45,
+    fontFamily: "Quicksand-SemiBold"
+  },
+  noAccountText: {
+    marginTop: 20,
+    paddingTop: 20,
+    marginLeft: 20,
+    marginRight: 20,
+    color: "#13D0FF",
+    alignSelf: "center",
+    fontFamily: "Quicksand-SemiBold"
   }
 });

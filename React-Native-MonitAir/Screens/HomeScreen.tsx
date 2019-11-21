@@ -41,9 +41,9 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
         humidity_mean: null,
         pressure_mean: null,
         reading_id: null,
-        sensor_id: "",
+        sensor_id: '',
         temp_mean: null,
-        timestamp: "",
+        timestamp: '',
         total_quality_mean: null
       },
       errMsg: null
@@ -74,7 +74,9 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
             `http://brejconies.pythonanywhere.com/most_recent_reading/${loggedInUser[0].sensor_id}`
           )
           .then(r => {
-            console.log("successful reading");
+
+            this.updateReadings();
+
             this.setState({ reading: r.data, isLoading: false });
           });
       })
@@ -84,14 +86,7 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
         this.setState({ errMsg: err.response.data.msg });
       });
   }
-  componentDidUpdate(prevProps, prevState) {
-    if (
-      this.state.reading.total_quality_mean !==
-      prevState.reading.total_quality_mean
-    ) {
-      this.updateReadings();
-    }
-  }
+
   updateReadings() {
     const { loggedInUser } = this.state;
     setInterval(() => {
@@ -107,7 +102,7 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
 
           this.setState({ errMsg: err.response.data.msg });
         });
-    }, 10000);
+    }, 30000);
   }
   render() {
     const { reading, loggedInUser, errMsg } = this.state;
@@ -152,13 +147,17 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
           <Circle
             title="Temperature - °C"
             navigate={navigate}
+
             reading={reading.temp_mean}
             sensor_id={sensor_id}
             query="temp_mean"
           />
           <Circle
+
             title="Humidity - %"
             navigate={navigate}
+
+
             reading={reading.humidity_mean}
             sensor_id={sensor_id}
             query="humidity_mean"

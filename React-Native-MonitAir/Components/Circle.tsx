@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 
 export interface CircleProps {
   title: string;
@@ -16,13 +16,7 @@ interface State {
 export default class Circle extends React.Component<CircleProps, State> {
   constructor(props: CircleProps) {
     super(props);
-    // this.state = {
-    //   isLoading: true
-    // };
   }
-  // componentDidMount() {
-  //   this.setState({ isLoading: false });
-  // }
   componentDidUpdate(prevProps, prevState) {
     const reading = this.props.reading;
     const title = this.props.title;
@@ -32,7 +26,6 @@ export default class Circle extends React.Component<CircleProps, State> {
   }
   render() {
     const { navigate, title, sensor_id, query, reading } = this.props;
-    // if (this.state.isLoading) return <Text>...Loading</Text>;
     return (
       <>
         <View style={styles.gridItem}>
@@ -45,22 +38,23 @@ export default class Circle extends React.Component<CircleProps, State> {
               borderWidth: 3,
               marginTop: 25,
               marginBottom: 5,
-              justifyContent: "center",
-              alignItems: "center",
+              justifyContent: 'center',
+              alignItems: 'center',
               backgroundColor: setBackgroundColour(reading, title)
             }}
           >
             <Text
               style={styles.text}
               onPress={() => {
-                navigate("Analysis", {
+                navigate('Analysis', {
                   title,
                   sensor_id,
                   query
                 });
               }}
             >
-              {reading}
+              {Math.round(reading)}
+              {query === 'temp_mean' ? '°C' : '%'}
             </Text>
           </View>
           <Text style={styles.titleText}>{title}</Text>
@@ -70,18 +64,18 @@ export default class Circle extends React.Component<CircleProps, State> {
   }
 }
 const setBackgroundColour = (reading, title) => {
-  if (title === "Temperature - °C") {
-    if (reading <= 12) return "#00A6ED"; // VIVID CERULEAN
-    if (reading <= 18) return "#88CCF1"; // BABY BLUE
-    if (reading <= 24) return "#29BF12"; // KELLY GREEN
-    if (reading <= 30) return "#FFB400"; // UCLA GOLD
-    if (reading > 30) return "#DD1C1A"; // MAXIMUM RED
+  if (title === 'Temperature') {
+    if (reading <= 12) return '#00A6ED'; // VIVID CERULEAN
+    if (reading <= 18) return '#88CCF1'; // BABY BLUE
+    if (reading <= 24) return '#29BF12'; // KELLY GREEN
+    if (reading <= 30) return '#FFB400'; // UCLA GOLD
+    if (reading > 30) return '#DD1C1A'; // MAXIMUM RED
   } else {
-    if (reading < 20) return "#00A6ED"; // VIVID CERULEAN
-    if (reading < 40) return "#88CCF1"; // BABY BLUE
-    if (reading < 60) return "#29BF12"; // KELLY GREEN
-    if (reading < 80) return "#FFB400"; // UCLA GOLD
-    if (reading > 80) return "#DD1C1A"; // MAXIMUM RED
+    if (reading < 20) return '#00A6ED'; // VIVID CERULEAN
+    if (reading < 40) return '#88CCF1'; // BABY BLUE
+    if (reading < 60) return '#29BF12'; // KELLY GREEN
+    if (reading < 80) return '#FFB400'; // UCLA GOLD
+    if (reading > 80) return '#DD1C1A'; // MAXIMUM RED
   }
 };
 
