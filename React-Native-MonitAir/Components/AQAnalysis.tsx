@@ -6,7 +6,7 @@ export interface AnalysisProps {
   readings: object[];
 }
 
-const AQAnalysis = ({ readings }) => {
+const AQAnalysis = ({ readings, navigate }) => {
   readings = readings.sort((a, b) => a.y - b.y);
 
   const lowestAQI = readings[0];
@@ -51,9 +51,7 @@ const AQAnalysis = ({ readings }) => {
         colors={['#3B7BFF', '#13D0FF']}
         style={styles.linearGradient}
       >
-        <TouchableOpacity
-          onPress={() => this.props.navigation.navigate('Hints')}
-        >
+        <TouchableOpacity onPress={() => navigate('Hints')}>
           <Text style={styles.buttonText}>Hints & Tips</Text>
         </TouchableOpacity>
       </LinearGradient>

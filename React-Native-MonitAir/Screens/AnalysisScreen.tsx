@@ -111,7 +111,7 @@ export default class AnalysisScreen extends React.Component<
             </View>
             <View style={styles.analysisContainer}>
               {query === 'total_quality_mean' ? (
-                <AQAnalysis readings={readings} />
+                <AQAnalysis navigate={navigate} readings={readings} />
               ) : null}
               {query === 'humidity_mean' ? (
                 <HumidityAnalysis readings={readings} />
