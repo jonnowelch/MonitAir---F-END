@@ -77,8 +77,8 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
             this.setState({ reading: r.data, isLoading: false });
           });
       })
-      .catch(({ response: { data } }) => {
-        this.setState({ errMsg: data.msg });
+      .catch(err => {
+        this.setState({ errMsg: err.response.data.msg });
       });
   }
 
