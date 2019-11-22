@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
 import Header from '../Components/Header';
 
 interface Props {
@@ -27,9 +27,24 @@ const HintsScreen: React.SFC<Props> = ({ navigation: { navigate } }) => (
           too chilly to throw open the windows to pull out the musty air, so
           while you await the warmer weather it's important to be aware of some
           of the allergy and respiratory triggers that may be lurking in your
-          surroundings.{'\n'}
-          {'\n'}These easy to follow tips will help ensure you keep the air
-          quality in your home at a safe level.
+          surroundings.
+          {'\n'}
+          {'\n'}
+          Below is a table showing a breakdown of what the AQI readings you see
+          in this app mean.
+        </Text>
+        <Image
+          source={require('../assets/PM2017.png')}
+          style={{
+            height: 200,
+            width: 250,
+            alignSelf: 'center',
+            margin: 10
+          }}
+        ></Image>
+        <Text style={styles.text}>
+          These easy to follow tips will help ensure you keep the air quality in
+          your home at a safe level.
         </Text>
         <Text style={styles.text}>
           1. Keep It Clean! A clean house is a healthier house. Your cleaning

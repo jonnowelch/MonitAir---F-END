@@ -11,6 +11,7 @@ const Header: React.SFC<HeaderProps> = ({ navigate, unclickable }) => {
     <>
       <View style={{ justifyContent: 'center' }}>
         <TouchableHighlight
+          underlayColor={'white'}
           onPress={() => {
             if (!unclickable) navigate('Home');
           }}
