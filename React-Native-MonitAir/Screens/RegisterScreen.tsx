@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,12 +6,12 @@ import {
   TouchableOpacity,
   TextInput,
   Alert
-} from "react-native";
-import Header from "../Components/Header";
-import firebase from "../firebase.js";
-import axios from "axios";
-import Loading from "../Components/Loading";
-import { LinearGradient } from "expo-linear-gradient";
+} from 'react-native';
+import Header from '../Components/Header';
+import firebase from '../firebase.js';
+import axios from 'axios';
+import Loading from '../Components/Loading';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export interface RegisterProps {
   navigation: any;
@@ -32,12 +32,12 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
   constructor(props: RegisterProps) {
     super(props);
     this.state = {
-      first_name: "",
-      surname: "",
-      email: "",
-      password: "",
-      username: "",
-      sensor_id: "",
+      first_name: '',
+      surname: '',
+      email: '',
+      password: '',
+      username: '',
+      sensor_id: '',
       errCode: undefined,
       isLoading: true
     };
@@ -46,20 +46,20 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
     setTimeout(() => this.setState({ isLoading: false }), 1000);
   }
   render() {
-    if (this.state.isLoading) return <Loading />;
-    const { errCode } = this.state;
+    const { errCode, isLoading } = this.state;
+    if (isLoading) return <Loading />;
     if (errCode) {
       const userFacingErrMsg =
-        errCode === "auth/invalid-email"
-          ? "Oops! Looks like your email address is invalid; please try again!"
-          : errCode === "auth/email-already-in-use"
+        errCode === 'auth/invalid-email'
+          ? 'Oops! Looks like your email address is invalid; please try again!'
+          : errCode === 'auth/email-already-in-use'
           ? "Looks like you've already signed up! Please use login screen to log in!"
-          : errCode === "auth/weak-password"
-          ? "Your password is up to you, but it needs to be stronger than that!"
-          : "Fallback error message";
-      Alert.alert("Registration Failed", userFacingErrMsg, [
+          : errCode === 'auth/weak-password'
+          ? 'Your password is up to you, but it needs to be stronger than that!'
+          : 'Fallback error message';
+      Alert.alert('Registration Failed', userFacingErrMsg, [
         {
-          text: "Please try again",
+          text: 'Please try again',
           onPress: () => this.setState({ errCode: undefined })
         }
       ]);
@@ -77,27 +77,27 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
       const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,}$/i;
 
       if (!regex.test(email)) {
-        alert("Invalid email format");
+        alert('Invalid email format');
         return;
       }
       if (!first_name.trim().length) {
-        alert("Please enter a first name");
+        alert('Please enter a first name');
         return;
       }
       if (!surname.trim().length) {
-        alert("Please enter a surname");
+        alert('Please enter a surname');
         return;
       }
       if (username.trim().length < 4) {
-        alert("Username must be 4 or more characters");
+        alert('Username must be 4 or more characters');
         return;
       }
       if (!password.length) {
-        alert("Ooops! You forgot to enter a password!");
+        alert('Ooops! You forgot to enter a password!');
         return;
       }
       if (sensor_id.length !== 16) {
-        alert("Sensor ID will be 16 characters");
+        alert('Sensor ID will be 16 characters');
         return;
       }
 
@@ -106,7 +106,7 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
         .createUserWithEmailAndPassword(email, password)
         .then(() => {
           const userID = firebase.auth().currentUser!.uid;
-          axios.post("http://brejconies.pythonanywhere.com/user", {
+          axios.post('http://brejconies.pythonanywhere.com/user', {
             first_name,
             surname,
             email,
@@ -116,30 +116,19 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
           });
         })
         .then(() => {
-          this.props.navigation.navigate("Login");
-          Alert.alert("Successfully Registered! Please login.");
+          this.props.navigation.navigate('Login');
+          Alert.alert('Successfully Registered! Please login.');
         })
-        .catch((error: any) => {
-          console.log(error.code);
-          const errCode = error.code;
-          this.setState({ errCode });
+        .catch(({ code }) => {
+          this.setState({ errCode: code });
         });
     };
     return (
       <>
         <Header navigate={this.props.navigation.navigate} unclickable={true} />
         <View>
-          <Text
-            style={{
-              fontSize: 20,
-              paddingBottom: 20,
-              color: "#13D0FF",
-              alignSelf: "center"
-            }}
-          >
-            Please enter your details:
-          </Text>
-          <View style={{ paddingBottom: 10 }}>
+          <Text style={styles.enterDetails}>Please enter your details:</Text>
+          <View style={styles.textInputView}>
             <TextInput
               style={styles.input}
               placeholder="Enter Forename"
@@ -147,7 +136,7 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
               onChangeText={first_name => this.setState({ first_name })}
             ></TextInput>
           </View>
-          <View style={{ paddingBottom: 10 }}>
+          <View style={styles.textInputView}>
             <TextInput
               style={styles.input}
               placeholder="Enter Surname"
@@ -155,7 +144,7 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
               onChangeText={surname => this.setState({ surname })}
             ></TextInput>
           </View>
-          <View style={{ paddingBottom: 10 }}>
+          <View style={styles.textInputView}>
             <TextInput
               style={styles.input}
               placeholder="Enter Email"
@@ -164,7 +153,7 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
               keyboardType="email-address"
             ></TextInput>
           </View>
-          <View style={{ paddingBottom: 10 }}>
+          <View style={styles.textInputView}>
             <TextInput
               style={styles.input}
               placeholder="Create Username"
@@ -172,7 +161,7 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
               onChangeText={username => this.setState({ username })}
             ></TextInput>
           </View>
-          <View style={{ paddingBottom: 10 }}>
+          <View style={styles.textInputView}>
             <TextInput
               style={styles.input}
               placeholder="Create Password"
@@ -181,7 +170,7 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
               onChangeText={password => this.setState({ password })}
             ></TextInput>
           </View>
-          <View style={{ paddingBottom: 10 }}>
+          <View style={styles.textInputView}>
             <TextInput
               style={styles.input}
               placeholder="Enter Sensor ID"
@@ -189,54 +178,30 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
               onChangeText={sensor_id => this.setState({ sensor_id })}
             ></TextInput>
           </View>
-          <View style={{ width: 200, marginTop: 20, alignSelf: "center" }}>
+          <View style={styles.touchOpView}>
             <LinearGradient
-              colors={["#3B7BFF", "#13D0FF"]}
-              style={{
-                padding: 15,
-                borderRadius: 10,
-                justifyContent: "center",
-                alignItems: "center"
-              }}
+              colors={['#3B7BFF', '#13D0FF']}
+              style={styles.linearGradient}
             >
               <TouchableOpacity onPress={() => handleSubmit()}>
-                <Text style={{ color: "white", alignSelf: "center" }}>
-                  Submit
-                </Text>
+                <Text style={styles.buttonText}>Submit</Text>
               </TouchableOpacity>
             </LinearGradient>
           </View>
-          <View style={{ justifyContent: "center" }}>
-            <Text
-              style={{
-                marginTop: 20,
-                paddingTop: 20,
-                marginLeft: 20,
-                marginRight: 20,
-                color: "#13D0FF",
-                alignSelf: "center",
-                fontFamily: "Quicksand-SemiBold"
-              }}
-            >
+          <View style={styles.alreadyView}>
+            <Text style={styles.already}>
               Already have an account? Click below to return to the login screen
             </Text>
           </View>
-          <View style={{ width: 200, marginTop: 20, alignSelf: "center" }}>
+          <View style={styles.touchOpView}>
             <LinearGradient
-              colors={["#3B7BFF", "#13D0FF"]}
-              style={{
-                padding: 15,
-                borderRadius: 10,
-                justifyContent: "center",
-                alignItems: "center"
-              }}
+              colors={['#3B7BFF', '#13D0FF']}
+              style={styles.linearGradient}
             >
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate("Login")}
+                onPress={() => this.props.navigation.navigate('Login')}
               >
-                <Text style={{ color: "white", alignSelf: "center" }}>
-                  Return to Login
-                </Text>
+                <Text style={styles.buttonText}>Return to Login</Text>
               </TouchableOpacity>
             </LinearGradient>
           </View>
@@ -247,12 +212,37 @@ export default class RegisterScreen extends Component<RegisterProps, State> {
 }
 
 const styles = StyleSheet.create({
+  enterDetails: {
+    fontSize: 20,
+    paddingBottom: 20,
+    color: '#13D0FF',
+    alignSelf: 'center'
+  },
+  textInputView: { paddingBottom: 10 },
   input: {
     height: 40,
     width: 300,
-    alignSelf: "center",
-    borderColor: "#3B7BFF",
+    alignSelf: 'center',
+    borderColor: '#3B7BFF',
     borderWidth: 1,
     paddingLeft: 15
-  }
+  },
+  linearGradient: {
+    padding: 15,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  alreadyView: { justifyContent: 'center' },
+  already: {
+    marginTop: 20,
+    paddingTop: 20,
+    marginLeft: 20,
+    marginRight: 20,
+    color: '#13D0FF',
+    alignSelf: 'center',
+    fontFamily: 'Quicksand-SemiBold'
+  },
+  buttonText: { color: 'white', alignSelf: 'center' },
+  touchOpView: { width: 200, marginTop: 20, alignSelf: 'center' }
 });

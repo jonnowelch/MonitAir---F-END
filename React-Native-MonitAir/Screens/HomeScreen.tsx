@@ -7,7 +7,6 @@ import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 import MainCircle from '../Components/MainCircle';
 import { TouchableHighlight } from 'react-native-gesture-handler';
-import * as api from '../api';
 
 export interface HomeProps {
   navigation: any;
@@ -69,19 +68,16 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
       })
       .then(() => {
         const { loggedInUser } = this.state;
-        axios
+        return axios
           .get(
             `http://brejconies.pythonanywhere.com/most_recent_reading/${loggedInUser[0].sensor_id}`
           )
           .then(r => {
             this.updateReadings();
-
             this.setState({ reading: r.data, isLoading: false });
           });
       })
       .catch(err => {
-        console.log('catch block');
-
         this.setState({ errMsg: err.response.data.msg });
       });
   }
@@ -93,44 +89,36 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
         .get(
           `http://brejconies.pythonanywhere.com/most_recent_reading/${loggedInUser[0].sensor_id}`
         )
-        .then(r => {
-          this.setState({ reading: r.data });
+        .then(({ data }) => {
+          this.setState({ reading: data });
         })
-        .catch(err => {
-          console.log('catch block');
-
-          this.setState({ errMsg: err.response.data.msg });
+        .catch(({ response: { data } }) => {
+          this.setState({ errMsg: data.msg });
         });
     }, 30000);
   }
   render() {
-    const { reading, loggedInUser, errMsg } = this.state;
+    const { reading, loggedInUser, errMsg, isLoading } = this.state;
     const sensor_id = loggedInUser[0] && loggedInUser[0].sensor_id;
     const { navigate } = this.props.navigation;
     if (errMsg) {
-      Alert.alert('Login failed', errMsg, [
+      Alert.alert('Error', errMsg, [
         {
-          text: 'Try again',
+          text: 'OK',
           onPress: () => this.setState({ errMsg: '' })
         }
       ]);
     }
-    if (this.state.isLoading) return <Loading />;
+    if (isLoading) return <Loading />;
     return (
       <>
-        <Header navigate={this.props.navigation} unclickable={true} />
+        <Header navigate={navigate} unclickable={true} />
         <TouchableHighlight
           onPress={() => {
             navigate('EasterEgg');
           }}
         >
-          <Text
-            style={{
-              color: '#3B7BFF',
-              alignSelf: 'center',
-              fontFamily: 'Quicksand-SemiBold'
-            }}
-          >
+          <Text style={styles.welcomeText}>
             Hi {loggedInUser[0] && loggedInUser[0].username} welcome to your
             monitAir!
           </Text>
@@ -163,7 +151,7 @@ export default class HomeScreen extends React.Component<HomeProps, State> {
           </Text>
           <LinearGradient
             colors={['#3B7BFF', '#13D0FF']}
-            style={{ padding: 15, borderRadius: 10 }}
+            style={styles.linearGradient}
           >
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Hints')}
@@ -186,6 +174,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  welcomeText: {
+    color: '#3B7BFF',
+    alignSelf: 'center',
+    fontFamily: 'Quicksand-SemiBold'
+  },
   text: {
     color: '#3B7BFF',
     margin: 10,
@@ -196,5 +189,6 @@ const styles = StyleSheet.create({
     color: 'white',
     alignSelf: 'center',
     fontFamily: 'Quicksand-SemiBold'
-  }
+  },
+  linearGradient: { padding: 15, borderRadius: 10 }
 });

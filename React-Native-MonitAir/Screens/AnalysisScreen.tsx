@@ -49,7 +49,7 @@ export default class AnalysisScreen extends React.Component<
   }
 
   render() {
-    const { navigation } = this.props;
+    const { navigate } = this.props.navigation;
     const { readings, date, isLoading, errResponse, query } = this.state;
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -64,7 +64,7 @@ export default class AnalysisScreen extends React.Component<
 
     return (
       <>
-        <Header navigate={navigation.navigate} />
+        <Header navigate={navigate} />
         <View style={styles.titleContainer}>
           <Text style={styles.title}>
             {query === 'total_quality_mean'
@@ -91,7 +91,9 @@ export default class AnalysisScreen extends React.Component<
                 <Button
                   color="#3B7BFF"
                   title="<"
-                  onPress={this.decreaseDate}
+                  onPress={() => {
+                    this.handleDateChange(-1);
+                  }}
                   disabled={this.state.noMoreReadings ? true : false}
                 />
                 <Text style={styles.paginationText}>
@@ -100,14 +102,16 @@ export default class AnalysisScreen extends React.Component<
                 <Button
                   color="#3B7BFF"
                   title=">"
-                  onPress={this.increaseDate}
+                  onPress={() => {
+                    this.handleDateChange(1);
+                  }}
                   disabled={date >= today ? true : false}
                 />
               </View>
             </View>
             <View style={styles.analysisContainer}>
               {query === 'total_quality_mean' ? (
-                <AQAnalysis readings={readings} />
+                <AQAnalysis navigate={navigate} readings={readings} />
               ) : null}
               {query === 'humidity_mean' ? (
                 <HumidityAnalysis readings={readings} />
@@ -122,20 +126,11 @@ export default class AnalysisScreen extends React.Component<
     );
   }
 
-  decreaseDate = () => {
+  handleDateChange = (change: number) => {
     this.setState(prevState => {
       const newDate = new Date(prevState.date);
       newDate.setHours(0, 0, 0, 0);
-      newDate.setDate(newDate.getDate() - 1);
-      return { date: newDate };
-    });
-  };
-
-  increaseDate = () => {
-    this.setState(prevState => {
-      const newDate = new Date(prevState.date);
-      newDate.setHours(0, 0, 0, 0);
-      newDate.setDate(newDate.getDate() + 1);
+      newDate.setDate(newDate.getDate() + change);
       return { date: newDate, noMoreReadings: false };
     });
   };
@@ -150,16 +145,16 @@ export default class AnalysisScreen extends React.Component<
 
     api
       .getReadings(sensor_id, query, JSON.stringify(date).slice(1, 11))
-      .then(data => {
+      .then(readings => {
         this.setState(() => {
           const date = new Date();
           date.setHours(0, 0, 0, 0);
-          return { readings: data, isLoading: false, query, sensor_id, date };
+          return { readings, isLoading: false, query, sensor_id, date };
         });
       })
-      .catch(err => {
+      .catch(({ response: { data } }) => {
         this.setState({
-          errResponse: err.response.data.msg,
+          errResponse: data.msg,
           isLoading: false,
           noMoreReadings: true
         });
@@ -185,14 +180,14 @@ export default class AnalysisScreen extends React.Component<
             isLoading: false
           });
         })
-        .catch(err => {
+        .catch(({ response: { data } }) => {
           this.setState(prevState => {
             const newDate = new Date(prevState.date);
             newDate.setHours(0, 0, 0, 0);
             newDate.setDate(newDate.getDate() + 1);
             return {
               date: newDate,
-              errResponse: err.response.data.msg,
+              errResponse: data.msg,
               isLoading: false,
               noMoreReadings: true
             };
